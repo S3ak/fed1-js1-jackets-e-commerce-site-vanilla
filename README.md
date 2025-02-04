@@ -12,8 +12,9 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 - [Stackblitz](https://stackblitz.com/~/github.com/S3ak/fed1-js1-jackets-e-commerce-site-vanilla)
 - [Production deploy](https://outerdimensionaldrip.netlify.app)
-- [Staging deploy](http://staging-golden-egg-2024.vercel.app)
-- [Deployment Dashboard](https://vercel.com/seak/golden-egg-2024-next)
+- [Staging deploy](https://outerdimensionaldrip.netlify.app)
+- [staging Deployment Dashboard](https://app.netlify.com/sites/outerdimensionaldrip/overview)
+- [staging roduction Deployment Dashboard](https://app.netlify.com/sites/outerdimensionaldrip/overview)
 - [Last years website](https://golden-egg.vercel.app/)
 - [Last year code repo](github.com/Noroff-Fagskole/golden-egg)
 - [Design Doc](https://seak.notion.site/FED-Golden-Egg-12-06-2024-Internal-56ab227ff2d84ae6b9e06b5ab95c7a75?pvs=74)
