@@ -17,6 +17,8 @@
 @import "open-props/sizes";
 @import "open-props/gradients";
 
+@import "animate.css";
+
 * {
   margin: 0;
   padding: 0;
@@ -36,6 +38,8 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --animate-delay: 0.2s;
 }
 
 a {
@@ -139,6 +143,11 @@ button:focus-visible {
   flex: 1;
   min-width: 300px;
   margin-right: 20px;
+  border-radius: var(--radius-2);
+
+  img {
+    border-radius: var(--radius-2);
+  }
 }
 
 .product-image img {
@@ -277,4 +286,17 @@ button:focus-visible {
     margin-right: 0;
     margin-bottom: 20px;
   }
+}
+
+.c-filters {
+  padding: 1rem 1.2rem;
+}
+
+:where(
+  textarea,
+  select,
+  input:not([type="button"], [type="submit"], [type="reset"])
+) {
+  background-color: var(--gray-9);
+  border-radius: var(--radius-2);
 }

@@ -2,8 +2,11 @@ import { createHTML, clearNode } from "./utils.mjs";
 import { API_URL, ERROR_MESSAGE_DEFAULT, CURRENCY } from "./constants.mjs";
 
 const containerEl = document.querySelector("#js-products");
+const sortByEl = document.querySelector("#js-sort-by");
 
-if (!containerEl) {
+let products = [];
+
+if (!containerEl || !sortByEl) {
   console.error("JS cannot run!!!");
 } else {
   setup();
@@ -13,29 +16,32 @@ function setup() {
   getProducts();
 }
 
+sortByEl.addEventListener("change", (event) => {
+  const val = event.target.value;
+
+  // Sort productlist by price - low to high
+  if (val === "asc") {
+    sortByPriceDescinding();
+    // Sort productlist by price - high to low
+  } else if (val === "dec") {
+    sortByPriceAscending();
+  }
+
+  // NOTE: we need to rerender our sorted list now;
+  createProductsListEl(products);
+});
+
 async function getProducts() {
   clearNode(containerEl);
   createLoadingSkeleton();
 
   try {
     const response = await fetch(API_URL);
-    const { data, meta } = await response.json();
+    const { data } = await response.json();
+    products = data;
 
-    clearNode(containerEl);
-
-    data.forEach(({ id, title, image, price, description }) => {
-      const template = productTemplate({
-        id,
-        title,
-        imgUrl: image.url,
-        imgAl: image.alt,
-        price,
-        description,
-      });
-
-      const newEl = createHTML(template);
-      containerEl.append(newEl);
-    });
+    sortByPriceDescinding();
+    createProductsListEl(products);
   } catch (error) {
     console.error(ERROR_MESSAGE_DEFAULT, error?.message);
   }
@@ -48,9 +54,10 @@ function productTemplate({
   imgAl,
   price = 0,
   description = "Missing description",
+  index,
 }) {
   return `
- <article class="product-details">
+    <article class="product-details animate__animated animate__fadeInUp animate__delay-${index}s">
       <div class="product-image">
         <img src="${imgUrl}" alt="${imgAl}" />
       </div>
@@ -95,9 +102,39 @@ function productSkeletonTemplate() {
 }
 
 function createLoadingSkeleton(count = 3) {
-  [...Array(count)].forEach((i) => {
+  [...Array(count)].forEach(() => {
     const template = productSkeletonTemplate();
     const newEl = createHTML(template);
     containerEl.append(newEl);
+  });
+}
+
+function createProductsListEl(list = products) {
+  clearNode(containerEl);
+
+  list.forEach(({ id, title, image, price, description }) => {
+    const template = productTemplate({
+      id,
+      title,
+      imgUrl: image.url,
+      imgAl: image.alt,
+      price,
+      description,
+    });
+
+    const newEl = createHTML(template);
+    containerEl.append(newEl);
+  });
+}
+
+function sortByPriceDescinding() {
+  products.sort((a, b) => {
+    return a.price - b.price;
+  });
+}
+
+function sortByPriceAscending() {
+  products.sort((a, b) => {
+    return b.price - a.price;
   });
 }
