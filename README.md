@@ -2,35 +2,29 @@
 
 [Edit in StackBlitz next generation editor ⚡️](https://stackblitz.com/~/github.com/S3ak/fed1-js1-jackets-e-commerce-site-vanilla)
 
-3# **Golden Egg 2024: Celebrating Student Talent**
-
-Welcome to the Golden Egg 2024, the prestigious awards ceremony where we celebrate the outstanding talent and creativity of Noroff students from across Norway. This annual event is the culmination of a year of hard work and dedication, showcasing the diverse range of skills and achievements within our community
-
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app)
-
 ## Project Assets
 
 - [Stackblitz](https://stackblitz.com/~/github.com/S3ak/fed1-js1-jackets-e-commerce-site-vanilla)
-- [Production deploy](https://outerdimensionaldrip.netlify.app)
+- [Production deploy](https://outerdimensionaldrip.vercel.app/)
 - [Staging deploy](https://outerdimensionaldrip.netlify.app)
 - [staging Deployment Dashboard](https://app.netlify.com/sites/outerdimensionaldrip/overview)
-- [staging roduction Deployment Dashboard](https://app.netlify.com/sites/outerdimensionaldrip/overview)
-- [Last years website](https://golden-egg.vercel.app/)
-- [Last year code repo](github.com/Noroff-Fagskole/golden-egg)
-- [Design Doc](https://seak.notion.site/FED-Golden-Egg-12-06-2024-Internal-56ab227ff2d84ae6b9e06b5ab95c7a75?pvs=74)
-- [Lo-Fi Design Spec](https://www.figma.com/file/NS5L4jFsYPSDN0JGKINeG9/Lo-fi-Design-Spec?type=design&node-id=0%3A1&mode=dev)
-- [Hi-Fi Design Spec](https://www.figma.com/file/UkBJuKGaGr83zZxDcfKWAH/CA%3A-Usability-Testing-2?type=design&node-id=20%3A3&mode=design&t=ahSWKYXt5aSwOSuz-1)
-- [API URL](#TODO:@Mo)
+- [Production Deployment Dashboard](https://vercel.com/monde-sinekes-projects/outerdimensionaldrip)
+- [Design Doc](https://www.figma.com/board/thVST2qvAmfqEFS3JjU3GU/FED-JS1-Jackets-E-commerce-website?node-id=0-1&t=MmdtghNgkkem48SX-1)
+- [Lo-Fi Design Spec]()
+- [Hi-Fi Design Spec]()
+- [API URL](https://docs.noroff.dev/docs/v2/e-commerce/rainy-days)
 - [Analytics dashboard](#TODO:@Mo)
+- [TODOS](https://github.com/S3ak/fed1-js1-jackets-e-commerce-site-vanilla/issues)
 
 ## Tech Stack
 
 - [Vite](https://nextjs.org/)
+- [Animate CSS](https://animate.style/)
+- [Open Props](https://open-props.style/)
 - [Storybook](https://storybook.js.org/)
 - [Cypress](https://www.cypress.io/)
 - [Luxon](https://moment.github.io/luxon/#/)
-- [React Icons](https://react-icons.github.io/react-icons/)
-- [AutoAnimate](https://auto-animate.formkit.com/)
+- [Font Awesome](https://fontawesome.com/search?ic=free)
 - [Prettier](https://prettier.io/) - An opinionated code formatter
 - [Eslint](https://eslint.org/) - Find and fix problems in your JavaScript code
 
@@ -42,10 +36,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Features
 
-- Build components in isolation with Hot Module Replacement
 - SEO friendly #TODO
 - Responsive #TODO
-- Easy animations #TODO
 - Prebuilt components #TODO
 - E2E testing with every pull request #TODO
 

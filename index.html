@@ -4,10 +4,29 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
+    <title>Outer Dimensional Drip</title>
+    <script type="module" defer src="/src/index.mjs"></script>
+    <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
+    <header>
+      <h1>Outer Dimensional Drip</h1>
+    </header>
+
+    <main>
+      <section>
+        <section class="c-filters">
+          <form>
+            <select name="sort-by" id="js-sort-by">
+              <option value="asc">Price low-high</option>
+              <option value="dec">Price high-low</option>
+            </select>
+          </form>
+        </section>
+        <div id="js-products" class="products-list"></div>
+      </section>
+    </main>
+
+    <footer>Made with ❤️ by Monde Sineke</footer>
   </body>
 </html>
