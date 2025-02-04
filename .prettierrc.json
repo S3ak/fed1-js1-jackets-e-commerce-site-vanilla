@@ -1,0 +1,12 @@
+{
+  "tabWidth": 2,
+  "useTabs": false,
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "crlf"
+      }
+    ]
+  }
+}
