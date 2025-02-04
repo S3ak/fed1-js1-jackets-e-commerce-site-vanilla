@@ -16,7 +16,8 @@ styling will not be graded, but is nice to have in the final submission
 - As a user, I want to view a single product page with more detail.
 - As a user, I want to add a product to my basket.
 - As a user, I want to remove a product from my basket.
-- As a user, I want to view a summary of my cart on the checkout page. - As a user, I want to view an order-confirmation screen after checking out.
+- As a user, I want to view a summary of my cart on the checkout page.
+- As a user, I want to view an order-confirmation screen after checking out.
 
 ### Required Pages
 
@@ -40,8 +41,6 @@ Process
 
 You have been provided with three options to choose from:
 • Rainy Days API - Outdoor clothing
-• GameHub API - Video games
-• Square Eyes API – Movies
 
 The documentation website for each endpoint explains which options are available
 on the provided objects. These properties should be used and displayed to the user
