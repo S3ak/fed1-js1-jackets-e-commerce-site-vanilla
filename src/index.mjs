@@ -1,6 +1,5 @@
-const API_URL = "https://v2.api.noroff.dev/rainy-days";
-const ERROR_MESSAGE_DEFAULT = "Soemthing went wrong";
-const CURRENCY = "kr";
+import { createHTML, clearNode } from "./utils.mjs";
+import { API_URL, ERROR_MESSAGE_DEFAULT, CURRENCY } from "./constants.mjs";
 
 const containerEl = document.querySelector("#js-products");
 
@@ -15,17 +14,23 @@ function setup() {
 }
 
 async function getProducts() {
+  clearNode(containerEl);
+  createLoadingSkeleton();
+
   try {
     const response = await fetch(API_URL);
     const { data, meta } = await response.json();
-    data.forEach((item) => {
+
+    clearNode(containerEl);
+
+    data.forEach(({ id, title, image, price, description }) => {
       const template = productTemplate({
-        id: item.id,
-        title: item.title,
-        imgUrl: item.image.url,
-        imgAl: item.image.alt,
-        price: item.price,
-        description: item.description,
+        id,
+        title,
+        imgUrl: image.url,
+        imgAl: image.alt,
+        price,
+        description,
       });
 
       const newEl = createHTML(template);
@@ -36,7 +41,14 @@ async function getProducts() {
   }
 }
 
-function productTemplate({ id, title, imgUrl, imgAl, price, description }) {
+function productTemplate({
+  id,
+  title = "Unknown Item",
+  imgUrl,
+  imgAl,
+  price = 0,
+  description = "Missing description",
+}) {
   return `
  <article class="product-details">
       <div class="product-image">
@@ -65,8 +77,27 @@ function productTemplate({ id, title, imgUrl, imgAl, price, description }) {
  `;
 }
 
-function createHTML(template) {
-  const parser = new DOMParser();
-  const parsedDocument = parser.parseFromString(template, "text/html");
-  return parsedDocument.body.firstChild;
+function productSkeletonTemplate() {
+  return `
+  <article class="product-details">
+    <div class="product-image">
+      <div class="skeleton skeleton-image"></div>
+    </div>
+    <div class="product-info">
+      <div class="skeleton skeleton-title"></div>
+      <div class="skeleton skeleton-rating"></div>
+      <div class="skeleton skeleton-price"></div>
+      <div class="skeleton skeleton-description"></div>
+      <div class="skeleton skeleton-button"></div>
+    </div>
+  </article>
+ `;
+}
+
+function createLoadingSkeleton(count = 3) {
+  [...Array(count)].forEach((i) => {
+    const template = productSkeletonTemplate();
+    const newEl = createHTML(template);
+    containerEl.append(newEl);
+  });
 }

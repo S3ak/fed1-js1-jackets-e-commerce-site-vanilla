@@ -17,6 +17,12 @@
 @import "open-props/sizes";
 @import "open-props/gradients";
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -115,10 +121,18 @@ button:focus-visible {
   }
 }
 
+.products-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
 .product-details {
   display: flex;
   flex-wrap: wrap;
   padding: 20px;
+  max-width: 410px;
+  width: 100%;
 }
 
 .product-image {
@@ -176,6 +190,83 @@ button:focus-visible {
 
 .add-to-cart:hover {
   background-color: #e2b33c;
+}
+
+@media (max-width: 768px) {
+  .product-details {
+    flex-direction: column;
+  }
+  .product-image {
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+}
+
+/* Skeleton Base */
+.skeleton {
+  background-color: #e2e2e2;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Shimmer Animation */
+.skeleton::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Skeleton Elements */
+.skeleton-image {
+  width: 100%;
+  height: 400px;
+  margin-bottom: 20px;
+}
+
+.skeleton-title {
+  width: 60%;
+  height: 30px;
+  margin-bottom: 10px;
+}
+
+.skeleton-rating {
+  width: 40%;
+  height: 20px;
+  margin-bottom: 10px;
+}
+
+.skeleton-price {
+  width: 30%;
+  height: 25px;
+  margin-bottom: 20px;
+}
+
+.skeleton-description {
+  width: 100%;
+  height: 80px;
+  margin-bottom: 20px;
+}
+
+.skeleton-button {
+  width: 150px;
+  height: 40px;
+  border-radius: 3px;
 }
 
 @media (max-width: 768px) {
