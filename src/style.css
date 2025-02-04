@@ -114,3 +114,76 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.product-details {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 20px;
+}
+
+.product-image {
+  flex: 1;
+  min-width: 300px;
+  margin-right: 20px;
+}
+
+.product-image img {
+  max-width: 100%;
+  height: auto;
+}
+
+.product-info {
+  flex: 2;
+  min-width: 300px;
+}
+
+.product-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.product-rating {
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #ffa41c; /* Goldish color for stars */
+}
+
+.product-rating span {
+  margin-right: 5px;
+}
+
+.product-price {
+  font-size: 24px;
+  color: #b12704;
+  margin-bottom: 20px;
+}
+
+.product-description {
+  margin-bottom: 20px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.add-to-cart {
+  background-color: #f0c14b;
+  border: 1px solid #a88734;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.add-to-cart:hover {
+  background-color: #e2b33c;
+}
+
+@media (max-width: 768px) {
+  .product-details {
+    flex-direction: column;
+  }
+  .product-image {
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+}
