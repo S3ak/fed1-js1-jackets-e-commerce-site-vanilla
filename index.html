@@ -6,11 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Outer Dimensional Drip</title>
     <script type="module" defer src="/src/index.mjs"></script>
+    <script type="module" defer src="/src/cart.mjs"></script>
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
-    <header>
+    <header class="l-header">
       <a href="/"><h1>Outer Dimensional Drip</h1></a>
+
+      <button id="js-cart-toggle">Cart</button>
     </header>
 
     <main>
@@ -28,5 +31,16 @@
     </main>
 
     <footer>Made with ❤️ by Monde Sineke</footer>
+
+    <aside class="c-cart" id="js-cart">
+      <div class="c-cart-header">
+        <h2>Shopping Cart</h2>
+        <button class="c-close-cart" id="js-close-cart">&times;</button>
+      </div>
+      <div class="c-cart-items" id="js-cart-items"></div>
+      <div class="c-cart-footer">
+        <button class="c-add-to-cart">Checkout</button>
+      </div>
+    </aside>
   </body>
 </html>
