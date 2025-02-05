@@ -71,15 +71,21 @@ function productTemplate({
   description = "Missing description",
   index,
 }) {
+  const detailsUrl = `/product-details.html?id=${id}`;
   return `
-    <article class="product-details animate__animated animate__fadeInUp animate__delay-${index}s">
-      <div class="product-image">
-        <img src="${imgUrl}" alt="${imgAl}" />
+    <article class="c-product-preview-details animate__animated animate__fadeInUp animate__delay-${index}s">
+      <div class="c-product-preview-image">
+        <a href=${detailsUrl}>
+          <img src="${imgUrl}" alt="${imgAl}" />
+        </a>  
       </div>
 
-      <div class="product-info">
-        <h1 class="product-title">${title}</h1>
-        <div class="product-rating">
+      <div class="c-product-preview-info">
+        <h1 class="c-product-preview-title">
+          <a href=${detailsUrl}>${title}</a>
+        </h1>
+
+        <div class="c-product-preview-rating">
           <span>&#9733;</span>
           <span>&#9733;</span>
           <span>&#9733;</span>
@@ -87,13 +93,13 @@ function productTemplate({
           <span>&#9734;</span>
           <span>(123 reviews)</span>
         </div>
-        <div class="product-price">${price} ${CURRENCY}</div>
-        <div class="product-description">
+        <div class="c-product-preview-price">${price} ${CURRENCY}</div>
+        <div class="c-product-preview-description">
           <p>
             ${description}
           </p>
         </div>
-        <button class="add-to-cart" id="js-add-to-cart-${id}">Add to Cart</button>
+        <button class="c-add-to-cart" id="js-add-to-cart-${id}">Add to Cart</button>
       </div>
     </article>
  `;
@@ -101,11 +107,11 @@ function productTemplate({
 
 function productSkeletonTemplate() {
   return `
-  <article class="product-details">
-    <div class="product-image">
+  <article class="c-product-preview-details">
+    <div class="c-product-preview-image">
       <div class="skeleton skeleton-image"></div>
     </div>
-    <div class="product-info">
+    <div class="c-product-preview-info">
       <div class="skeleton skeleton-title"></div>
       <div class="skeleton skeleton-rating"></div>
       <div class="skeleton skeleton-price"></div>
