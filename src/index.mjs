@@ -6,22 +6,37 @@ const sortByEl = document.querySelector("#js-sort-by");
 
 let products = [];
 
-if (!containerEl || !sortByEl) {
-  console.error("JS cannot run!!!");
-} else {
-  setup();
-}
+setup();
 
 function setup() {
-  getProducts();
+  // Check if the containerEl and sortByEl elements exist in the DOM
+  if (!containerEl || !sortByEl) {
+    // Log an error message if either element is missing
+    console.error("JS cannot run!!!");
+  } else {
+    // If both elements exist, call the setup function to initialize the application
+    getProducts();
+  }
 }
 
+/**
+ * Event listener for the 'change' event on the sortByEl element.
+ * This function sorts the product list based on the selected value.
+ *
+ * @param {Event} event - The change event triggered by the sortByEl element.
+ *
+ * The function checks the value of the event target:
+ * - If the value is "asc", it calls sortByPriceDescending() to sort the product list by price in descending order.
+ * - If the value is "dec", it calls sortByPriceAscending() to sort the product list by price in ascending order.
+ *
+ * After sorting, it calls createProductsListEl(products) to rerender the sorted product list.
+ */
 sortByEl.addEventListener("change", (event) => {
   const val = event.target.value;
 
   // Sort productlist by price - low to high
   if (val === "asc") {
-    sortByPriceDescinding();
+    sortByPriceDescending();
     // Sort productlist by price - high to low
   } else if (val === "dec") {
     sortByPriceAscending();
@@ -40,7 +55,7 @@ async function getProducts() {
     const { data } = await response.json();
     products = data;
 
-    sortByPriceDescinding();
+    sortByPriceDescending();
     createProductsListEl(products);
   } catch (error) {
     console.error(ERROR_MESSAGE_DEFAULT, error?.message);
@@ -109,6 +124,18 @@ function createLoadingSkeleton(count = 3) {
   });
 }
 
+/**
+ * Creates and appends a list of product elements to the container element.
+ *
+ * @param {Array} [list=products] - The list of products to display. Each product should be an object with the following properties:
+ * @param {string} list[].id - The unique identifier for the product.
+ * @param {string} list[].title - The title of the product.
+ * @param {Object} list[].image - The image object for the product.
+ * @param {string} list[].image.url - The URL of the product image.
+ * @param {string} list[].image.alt - The alt text for the product image.
+ * @param {number} list[].price - The price of the product.
+ * @param {string} list[].description - The description of the product.
+ */
 function createProductsListEl(list = products) {
   clearNode(containerEl);
 
@@ -127,7 +154,7 @@ function createProductsListEl(list = products) {
   });
 }
 
-function sortByPriceDescinding() {
+function sortByPriceDescending() {
   products.sort((a, b) => {
     return a.price - b.price;
   });
