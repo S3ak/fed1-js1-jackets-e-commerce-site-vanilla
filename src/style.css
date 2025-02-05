@@ -60,6 +60,14 @@ body {
   min-height: 100vh;
 }
 
+.l-header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0.7rem 3rem;
+}
+
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
@@ -411,5 +419,59 @@ button:focus-visible {
   height: 40px;
   background: #ccc;
   border: none;
+  cursor: pointer;
+}
+
+.c-cart {
+  position: fixed;
+  top: 0;
+  right: 0;
+  min-width: 300px;
+  max-width: 40vw;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background-color: #242424;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  transition: transform 0.3s cubic-bezier(0.57, -0.04, 0, 1.23);
+  transform: translateX(100%);
+}
+.c-cart.is-open {
+  transform: translateX(0);
+}
+.c-cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.5rem;
+}
+.c-cart-items {
+  margin-top: 1rem;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.c-cart-item {
+  display: flex;
+  width: 100%;
+  gap: 0.3rem;
+
+  img {
+    max-width: 100px;
+  }
+}
+
+.c-cart-footer {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ddd;
+  text-align: center;
+}
+.c-close-cart {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
   cursor: pointer;
 }

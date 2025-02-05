@@ -1,5 +1,6 @@
 import { createHTML, clearNode } from "./utils.mjs";
 import { API_URL, ERROR_MESSAGE_DEFAULT, CURRENCY } from "./constants.mjs";
+import { addToCart } from "./cart.mjs";
 
 const containerEl = document.querySelector("#js-products");
 const sortByEl = document.querySelector("#js-sort-by");
@@ -156,6 +157,15 @@ function createProductsListEl(list = products) {
     });
 
     const newEl = createHTML(template);
+    const btn = newEl.querySelector("button");
+    btn.addEventListener("click", () => {
+      addToCart({
+        id,
+        title,
+        imgUrl: image.url,
+        price,
+      });
+    });
     containerEl.append(newEl);
   });
 }
