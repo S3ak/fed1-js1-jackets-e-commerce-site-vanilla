@@ -34,6 +34,7 @@ function setup() {
 }
 
 function cartItemTemplate({
+  id,
   imgUrl = "",
   title = "Unknown",
   price = 0,
@@ -48,7 +49,7 @@ function cartItemTemplate({
     </section>
 
     <section>
-      <button class="c-cart-item_remove">Remove</button>
+      <button class="c-cart-item_remove" data-btn="remove" id="${id}">Remove</button>
     </section>
    </div>
   `;
@@ -72,13 +73,16 @@ export function addToCart({ id, imgUrl, price, title }) {
 function clearCart() {
   setItemsToStorage([]);
   renderItems([]);
-  debugger;
+}
+
+function removeProductItem(items = [], selectedItemId) {
+  const filteredItems = items.filter((i) => i.id !== selectedItemId);
+
+  renderItems(filteredItems);
 }
 
 function calcTotal(items = []) {
-  const newTotal = items.reduce((total, item) => {
-    return item.price + total;
-  }, 0);
+  const newTotal = items.reduce((total, item) => item.price + total, 0);
 
   return newTotal.toFixed(2);
 }
@@ -90,14 +94,20 @@ function renderTotal(val, el) {
 function renderItems(items = []) {
   clearNode(cartItemsEl);
 
-  items.forEach(({ imgUrl, title, price }) => {
+  items.forEach(({ id, imgUrl, title, price }) => {
     const template = cartItemTemplate({
+      id,
       imgUrl,
       title,
       price,
     });
 
     const productItemEl = createHTML(template);
+    const removeBtnEl = productItemEl.querySelector('[data-btn="remove"]');
+    removeBtnEl.addEventListener("click", (event) => {
+      removeProductItem(items, event.target.id);
+    });
+
     cartItemsEl.append(productItemEl);
   });
 
