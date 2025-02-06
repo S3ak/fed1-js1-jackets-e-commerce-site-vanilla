@@ -5,13 +5,11 @@ const cartEl = document.querySelector("#js-cart");
 const cartCloseBtnEl = document.querySelector("#js-close-cart");
 const cartItemsEl = document.querySelector("#js-cart-items");
 
-let productListCart = [];
-
 setup();
 
 function setup() {
   // Check if the containerEl and sortByEl elements exist in the DOM
-  if (!cartToggleBtnEl || !cartEl || !cartCloseBtnEl) {
+  if (!cartToggleBtnEl || !cartEl || !cartCloseBtnEl || !cartItemsEl) {
     // Log an error message if either element is missing
     console.error("JS cannot run!!!");
   } else {
@@ -19,54 +17,72 @@ function setup() {
 
     cartToggleBtnEl.addEventListener("click", toggleCartVisibility);
     cartCloseBtnEl.addEventListener("click", toggleCartVisibility);
-    const oldCartItems = JSON.parse(window.localStorage.getItem("cart")) ?? [];
-    productListCart = oldCartItems;
 
-    renderItems();
+    const products = getItemsFromStorage();
+
+    renderItems(products);
   }
 }
 
-function toggleCartVisibility() {
-  cartEl.classList.toggle("is-open");
+function cartItemTemplate({
+  imgUrl = "",
+  title = "Unknown",
+  price = 0,
+  alt = "No Alt provided",
+}) {
+  return `
+   <div class="c-cart-item">
+    <section class="c-cart-item_row-first">
+    <img src="${imgUrl}" alt="${alt}" />
+    <h4>${title}</h4>
+    <strong class="c-cart-item_price">${price}</strong>
+    </section>
+
+    <section>
+      <button class="c-cart-item_remove">Remove</button>
+    </section>
+   </div>
+  `;
 }
 
-export function addToCart({ id = "", imgUrl, price, title }) {
-  console.log("Working", id, imgUrl, price, title);
-  productListCart.push({
+export function addToCart({ id, imgUrl, price, title }) {
+  const products = getItemsFromStorage();
+
+  products.push({
+    id,
     title,
     imgUrl,
     price,
   });
 
-  window.localStorage.setItem("cart", JSON.stringify(productListCart));
+  setItemsToStorage(products);
 
+  renderItems(products);
+}
+
+function renderItems(items = []) {
   clearNode(cartItemsEl);
 
-  renderItems();
-}
-
-function cartItemTemplate({ imgUrl = "", title = "Unknown", price = 0 }) {
-  return `
-   <div class="c-cart-item">
-    <img src=${imgUrl} alt="" />
-    <h4>${title}</h4>
-    <strong class="c-cart-item_price">${price}</strong>
-   </div>
-  `;
-}
-
-function renderItems() {
-  const newProductListCart =
-    JSON.parse(window.localStorage.getItem("cart")) ?? [];
-
-  newProductListCart.forEach((item) => {
+  items.forEach(({ imgUrl, title, price }) => {
     const template = cartItemTemplate({
-      imgUrl: item.imgUrl,
-      title: item.title,
-      price: item.price,
+      imgUrl,
+      title,
+      price,
     });
 
     const productItemEl = createHTML(template);
     cartItemsEl.append(productItemEl);
   });
+}
+
+function getItemsFromStorage() {
+  return JSON.parse(window.localStorage.getItem("cart")) ?? [];
+}
+
+function setItemsToStorage(items = []) {
+  window.localStorage.setItem("cart", JSON.stringify(items));
+}
+
+function toggleCartVisibility() {
+  cartEl.classList.toggle("is-open");
 }

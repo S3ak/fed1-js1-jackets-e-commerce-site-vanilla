@@ -157,7 +157,9 @@ function createProductsListEl(list = products) {
     });
 
     const newEl = createHTML(template);
+    // FIXME: Use data attribute
     const btn = newEl.querySelector("button");
+
     btn.addEventListener("click", () => {
       addToCart({
         id,
@@ -166,18 +168,15 @@ function createProductsListEl(list = products) {
         price,
       });
     });
+
     containerEl.append(newEl);
   });
 }
 
-function sortByPriceDescending() {
-  products.sort((a, b) => {
-    return a.price - b.price;
-  });
+function sortByPriceDescending(list = products) {
+  list.sort((a, b) => a.price - b.price);
 }
 
-function sortByPriceAscending() {
-  products.sort((a, b) => {
-    return b.price - a.price;
-  });
+function sortByPriceAscending(list = products) {
+  list.sort((a, b) => b.price - a.price);
 }
