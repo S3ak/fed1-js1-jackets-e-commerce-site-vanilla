@@ -4,12 +4,20 @@ const cartToggleBtnEl = document.querySelector("#js-cart-toggle");
 const cartEl = document.querySelector("#js-cart");
 const cartCloseBtnEl = document.querySelector("#js-close-cart");
 const cartItemsEl = document.querySelector("#js-cart-items");
+const clearCartBtnEl = document.querySelector("#js-clear-cart");
+const totalEl = document.querySelector("#js-cart-total");
 
 setup();
 
 function setup() {
   // Check if the containerEl and sortByEl elements exist in the DOM
-  if (!cartToggleBtnEl || !cartEl || !cartCloseBtnEl || !cartItemsEl) {
+  if (
+    !cartToggleBtnEl ||
+    !cartEl ||
+    !cartCloseBtnEl ||
+    !cartItemsEl ||
+    !clearCartBtnEl
+  ) {
     // Log an error message if either element is missing
     console.error("JS cannot run!!!");
   } else {
@@ -17,6 +25,7 @@ function setup() {
 
     cartToggleBtnEl.addEventListener("click", toggleCartVisibility);
     cartCloseBtnEl.addEventListener("click", toggleCartVisibility);
+    clearCartBtnEl.addEventListener("click", clearCart);
 
     const products = getItemsFromStorage();
 
@@ -60,6 +69,24 @@ export function addToCart({ id, imgUrl, price, title }) {
   renderItems(products);
 }
 
+function clearCart() {
+  setItemsToStorage([]);
+  renderItems([]);
+  debugger;
+}
+
+function calcTotal(items = []) {
+  const newTotal = items.reduce((total, item) => {
+    return item.price + total;
+  }, 0);
+
+  return newTotal.toFixed(2);
+}
+
+function renderTotal(val, el) {
+  el.textContent = val;
+}
+
 function renderItems(items = []) {
   clearNode(cartItemsEl);
 
@@ -73,6 +100,9 @@ function renderItems(items = []) {
     const productItemEl = createHTML(template);
     cartItemsEl.append(productItemEl);
   });
+
+  const total = calcTotal(items);
+  renderTotal(total, totalEl);
 }
 
 function getItemsFromStorage() {
