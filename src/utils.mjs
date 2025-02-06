@@ -9,6 +9,12 @@ export function createHTML(template) {
   return parsedDocument.body.firstChild;
 }
 
+function removeAllChildNodes(parent) {
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild);
+  }
+}
+
 export function clearNode(el) {
-  el.innerHTML = "";
+  removeAllChildNodes(el);
 }

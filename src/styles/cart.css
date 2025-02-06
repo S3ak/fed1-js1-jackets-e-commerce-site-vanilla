@@ -61,3 +61,21 @@
   font-size: 1.5rem;
   cursor: pointer;
 }
+
+.c-cart-item_quantity-total {
+  color: var(--stone-7);
+}
+
+.c-cart-item_controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  justify-content: space-between;
+}
+
+.c-cart-item_quantity-container {
+  display: flex;
+  gap: 0.2rem;
+  justify-content: center;
+  align-items: center;
+}

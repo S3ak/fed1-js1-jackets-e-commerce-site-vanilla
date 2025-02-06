@@ -39,17 +39,35 @@ function cartItemTemplate({
   title = "Unknown",
   price = 0,
   alt = "No Alt provided",
+  quantity = 1,
+  subTotal = price,
 }) {
   return `
    <div class="c-cart-item">
     <section class="c-cart-item_row-first">
-    <img src="${imgUrl}" alt="${alt}" />
+    
+    <a href="/product-details.html?id=${id}">
+      <img src="${imgUrl}" alt="${alt}" />
+    </a>
+    
     <h4>${title}</h4>
+    
     <strong class="c-cart-item_price">${price}</strong>
+    
+    <p class="c-cart-item_quantity-total">(${subTotal})</p>
+    
     </section>
 
-    <section>
+    <section class="c-cart-item_controls">
       <button class="c-cart-item_remove" data-btn="remove" id="${id}">Remove</button>
+
+      <div class="c-cart-item_quantity-container">
+        <button class="c-cart-item_remove" data-btn="decreaseQuantity" data-id="${id}">-</button>
+        
+        <p class="c-cart-item_quantity">${quantity}</p>
+        
+        <button class="c-cart-item_remove" data-btn="increaseQuantity" data-id="${id}">+</button>
+      </div>
     </section>
    </div>
   `;
@@ -58,12 +76,24 @@ function cartItemTemplate({
 export function addToCart({ id, imgUrl, price, title }) {
   const products = getItemsFromStorage();
 
-  products.push({
-    id,
-    title,
-    imgUrl,
-    price,
+  // Remeber findIndex qill give us -1 if nothing is found.
+  const foundProductIndex = products.findIndex((item) => {
+    return item.id === id;
   });
+
+  // if the product doesn't already exist in our cart then add it to the cart else change the quantity;
+  // NB: -1 is a truthy value
+  if (foundProductIndex === -1) {
+    products.push({
+      id,
+      title,
+      imgUrl,
+      price,
+      quantity: 1,
+    });
+  } else {
+    products[foundProductIndex].quantity++;
+  }
 
   setItemsToStorage(products);
 
@@ -77,12 +107,24 @@ function clearCart() {
 
 function removeProductItem(items = [], selectedItemId) {
   const filteredItems = items.filter((i) => i.id !== selectedItemId);
+  // TODO: We need to remove the event listeners;
+  setItemsToStorage(filteredItems);
 
   renderItems(filteredItems);
 }
 
 function calcTotal(items = []) {
-  const newTotal = items.reduce((total, item) => item.price + total, 0);
+  let newTotal = 0;
+
+  if (items.length > 0) {
+    newTotal = items.reduce(
+      // We need to calc the total number of products including their qauntities. NB; BODMAS
+      (total, item) => item.quantity * item.price + total,
+      0,
+    );
+  } else {
+    return 0;
+  }
 
   return newTotal.toFixed(2);
 }
@@ -94,18 +136,37 @@ function renderTotal(val, el) {
 function renderItems(items = []) {
   clearNode(cartItemsEl);
 
-  items.forEach(({ id, imgUrl, title, price }) => {
+  items.forEach(({ id, imgUrl, title, price, quantity }) => {
+    const subTotal = (price * quantity).toFixed(2);
+
     const template = cartItemTemplate({
       id,
       imgUrl,
       title,
       price,
+      quantity,
+      subTotal,
     });
 
     const productItemEl = createHTML(template);
     const removeBtnEl = productItemEl.querySelector('[data-btn="remove"]');
+    const increaseBtnEl = productItemEl.querySelector(
+      '[data-btn="increaseQuantity"]',
+    );
+    const decreaseBtnEl = productItemEl.querySelector(
+      '[data-btn="decreaseQuantity"]',
+    );
+
     removeBtnEl.addEventListener("click", (event) => {
       removeProductItem(items, event.target.id);
+    });
+
+    increaseBtnEl.addEventListener("click", (event) => {
+      increaseQuantity(items, event.target.dataset.id);
+    });
+
+    decreaseBtnEl.addEventListener("click", (event) => {
+      decreaseQuantity(items, event.target.dataset.id);
     });
 
     cartItemsEl.append(productItemEl);
@@ -125,4 +186,37 @@ function setItemsToStorage(items = []) {
 
 function toggleCartVisibility() {
   cartEl.classList.toggle("is-open");
+}
+
+function increaseQuantity(items = [], id) {
+  const foundIndex = items.findIndex((item) => item.id === id);
+  if (foundIndex === -1) {
+    return;
+  }
+
+  items[foundIndex].quantity++;
+  setItemsToStorage(items);
+
+  renderItems(items);
+}
+
+function decreaseQuantity(items = [], id) {
+  const foundIndex = items.findIndex((item) => item.id === id);
+  let newItems = [];
+
+  if (foundIndex === -1) {
+    return;
+  }
+
+  items[foundIndex].quantity--;
+
+  if (items[foundIndex].quantity <= 0) {
+    newItems = items.filter((i) => i.id !== items[foundIndex].id);
+  } else {
+    newItems = items;
+  }
+
+  setItemsToStorage(newItems);
+
+  renderItems(newItems);
 }
