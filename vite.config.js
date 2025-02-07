@@ -6,6 +6,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  test: {
+    environment: "happy-dom", // or 'jsdom', 'node'
+  },
   build: {
     rollupOptions: {
       input: {
