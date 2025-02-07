@@ -1,6 +1,7 @@
 import { createHTML, clearNode } from "../utils.mjs";
 import cartItemTemplate from "./cart.template.mjs";
 import { calcTotal, decreaseQuantity } from "./utils.mjs";
+import { ERROR_MESSAGE_DOM_EL } from "../constants.mjs";
 
 const cartToggleBtnEl = document.querySelector("#js-cart-toggle");
 const cartEl = document.querySelector("#js-cart");
@@ -21,7 +22,7 @@ function setup() {
     !clearCartBtnEl
   ) {
     // Log an error message if either element is missing
-    console.error("JS cannot run!!!");
+    console.error(ERROR_MESSAGE_DOM_EL);
   } else {
     // If both elements exist, call the setup function to initialize the application
 
@@ -73,8 +74,7 @@ function removeProductItem(items = [], selectedItemId) {
 
 function renderTotal(val = "", el) {
   if (!el) {
-    const err = new Error("The HTML DOM element is not present");
-    console.error(err);
+    console.error(new Error(ERROR_MESSAGE_DOM_EL));
     return;
   }
 

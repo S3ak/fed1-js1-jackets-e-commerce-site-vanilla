@@ -1,6 +1,11 @@
 import { createHTML, clearNode } from "./utils.mjs";
-import { API_URL, ERROR_MESSAGE_DEFAULT, CURRENCY } from "./constants.mjs";
-import { addToCart } from "./cart.mjs";
+import {
+  API_URL,
+  ERROR_MESSAGE_DEFAULT,
+  CURRENCY,
+  ERROR_MESSAGE_DOM_EL,
+} from "./constants.mjs";
+import { addToCart } from "./cart/cart.mjs";
 
 const containerEl = document.querySelector("#js-products");
 const sortByEl = document.querySelector("#js-sort-by");
@@ -13,41 +18,41 @@ function setup() {
   // Check if the containerEl and sortByEl elements exist in the DOM
   if (!containerEl || !sortByEl) {
     // Log an error message if either element is missing
-    console.error("JS cannot run!!!");
+    console.error(ERROR_MESSAGE_DOM_EL);
   } else {
     // If both elements exist, call the setup function to initialize the application
     getProducts();
+
+    /**
+     * Event listener for the 'change' event on the sortByEl element.
+     * This function sorts the product list based on the selected value.
+     *
+     * @param {Event} event - The change event triggered by the sortByEl element.
+     *
+     * The function checks the value of the event target:
+     * - If the value is "asc", it calls sortByPriceDescending() to sort the product list by price in descending order.
+     * - If the value is "dec", it calls sortByPriceAscending() to sort the product list by price in ascending order.
+     *
+     * After sorting, it calls createProductsListEl(products) to rerender the sorted product list.
+     */
+    sortByEl.addEventListener("change", (event) => {
+      const val = event.target.value;
+
+      // Sort productlist by price - low to high
+      if (val === "asc") {
+        sortByPriceDescending();
+        // Sort productlist by price - high to low
+      } else if (val === "dec") {
+        sortByPriceAscending();
+      }
+
+      // NOTE: we need to rerender our sorted list now;
+      createProductsListEl(products, containerEl);
+    });
   }
 }
 
-/**
- * Event listener for the 'change' event on the sortByEl element.
- * This function sorts the product list based on the selected value.
- *
- * @param {Event} event - The change event triggered by the sortByEl element.
- *
- * The function checks the value of the event target:
- * - If the value is "asc", it calls sortByPriceDescending() to sort the product list by price in descending order.
- * - If the value is "dec", it calls sortByPriceAscending() to sort the product list by price in ascending order.
- *
- * After sorting, it calls createProductsListEl(products) to rerender the sorted product list.
- */
-sortByEl.addEventListener("change", (event) => {
-  const val = event.target.value;
-
-  // Sort productlist by price - low to high
-  if (val === "asc") {
-    sortByPriceDescending();
-    // Sort productlist by price - high to low
-  } else if (val === "dec") {
-    sortByPriceAscending();
-  }
-
-  // NOTE: we need to rerender our sorted list now;
-  createProductsListEl(products);
-});
-
-async function getProducts() {
+export async function getProducts() {
   clearNode(containerEl);
   createLoadingSkeleton();
 
@@ -57,7 +62,7 @@ async function getProducts() {
     products = data;
 
     sortByPriceDescending();
-    createProductsListEl(products);
+    createProductsListEl(products, containerEl);
   } catch (error) {
     console.error(ERROR_MESSAGE_DEFAULT, error?.message);
   }
@@ -96,9 +101,7 @@ function productTemplate({
         </div>
         <div class="c-product-preview-price">${price} ${CURRENCY}</div>
         <div class="c-product-preview-description">
-          <p>
-            ${description}
-          </p>
+          <p>${description}</p>
         </div>
         <button class="c-add-to-cart" id="js-add-to-cart-${id}">Add to Cart</button>
       </div>
@@ -143,8 +146,13 @@ function createLoadingSkeleton(count = 3) {
  * @param {number} list[].price - The price of the product.
  * @param {string} list[].description - The description of the product.
  */
-function createProductsListEl(list = products) {
-  clearNode(containerEl);
+export function createProductsListEl(list = [], el) {
+  if (!el) {
+    console.error(ERROR_MESSAGE_DOM_EL);
+    return;
+  }
+
+  clearNode(el);
 
   list.forEach(({ id, title, image, price, description }) => {
     const template = productTemplate({
@@ -169,14 +177,14 @@ function createProductsListEl(list = products) {
       });
     });
 
-    containerEl.append(newEl);
+    el.append(newEl);
   });
 }
 
-function sortByPriceDescending(list = products) {
+export function sortByPriceDescending(list = products) {
   list.sort((a, b) => a.price - b.price);
 }
 
-function sortByPriceAscending(list = products) {
+export function sortByPriceAscending(list = products) {
   list.sort((a, b) => b.price - a.price);
 }
