@@ -1,17 +1,33 @@
 import { CURRENCY, ERROR_MESSAGE_DEFAULT, API_URL } from "./constants.mjs";
-import { clearNode, createHTML } from "./utils.mjs";
+import {
+  areDOMElementPresent,
+  clearNode,
+  createHTML,
+  getDOMElements,
+} from "./utils.mjs";
 
-const containerEl = document.querySelector("#js-product-details");
+const DOMElements = getDOMElements(["#js-product-details"]);
+const [containerEl] = DOMElements;
 
 setup();
 
+/**
+ * Initializes the product details setup process.
+ *
+ * This function checks for the presence of necessary DOM elements and extracts
+ * the 'id' parameter from the URL's query string to render the product details.
+ * If the required DOM elements are not found, it logs an error message.
+ *
+ * @function setup
+ * @throws Will log an error message if the required DOM elements are not found.
+ */
 function setup() {
-  // Check if the containerEl and sortByEl elements exist in the DOM
-  if (!containerEl) {
-    // Log an error message if either element is missing
-    console.error("JS cannot run!!!");
-  } else {
-    // If both elements exist, call the setup function to initialize the application
+  try {
+    // Check if the containerEl and sortByEl elements exist in the DOM
+
+    if (!areDOMElementPresent(DOMElements)) {
+      return;
+    }
 
     /**
      * Extracts the 'id' parameter from the URL's query string.
@@ -30,11 +46,34 @@ function setup() {
      */
     const id = searchParameters.get("id");
 
-    fetchProductDetails(id);
+    renderProductDetails(id, containerEl);
+  } catch (error) {
+    // Log an error message if either element is missing
+    console.error(
+      "Could'nt find DOM elements. Please check the HTML",
+      error?.message,
+    );
   }
 }
 
-async function fetchProductDetails(productId) {
+/**
+ * @typedef {Object} ProductDetails
+ * @property {string} title - The name of the product.
+ * @property {number} price - The sell price of a product.
+ * @property {string} description - The description of the product.
+ * @property {Object} image - The image object.
+ * @property {string} image.url - The URL of the primary image.
+ * @property {string} image.alt - The alt text for the primary image.
+ */
+
+/**
+ * Fetches product details from the API.
+ *
+ * @param {string} [productId=""] - The ID of the product to fetch details for.
+ * @returns {Promise<ProductDetails>} - The product details data.
+ * @throws {Error} If no product ID is supplied or if the fetch operation fails.
+ */
+async function fetchProductDetails(productId = "") {
   try {
     if (!productId) {
       throw new Error("No Product Id was supplied");
@@ -42,23 +81,48 @@ async function fetchProductDetails(productId) {
 
     const response = await fetch(`${API_URL}/${productId}`);
     const { data } = await response.json();
-    const { image, title, price, description } = data;
 
-    const template = detailsTemplate({
-      primaryImgUrl: image.url,
-      alt: image.alt,
-      title,
-      price,
-      description,
-    });
-    const detailsEl = createHTML(template);
-    clearNode(containerEl);
-    containerEl.appendChild(detailsEl);
+    return data;
   } catch (error) {
     console.error(ERROR_MESSAGE_DEFAULT, error?.message);
   }
 }
 
+/**
+ * Renders the product details into the specified container element.
+ *
+ * @param {string} productId - The ID of the product to fetch details for.
+ * @param {HTMLElement} containerEl - The container element where the product details will be rendered.
+ * @returns {Promise<void>} A promise that resolves when the product details have been rendered.
+ */
+async function renderProductDetails(productId, containerEl) {
+  const { image, title, price, description } =
+    await fetchProductDetails(productId);
+
+  const template = detailsTemplate({
+    primaryImgUrl: image.url,
+    alt: image.alt,
+    title,
+    price,
+    description,
+  });
+
+  const detailsEl = createHTML(template);
+  clearNode(containerEl);
+  containerEl.appendChild(detailsEl);
+}
+
+/**
+ * Generates an HTML template for product details.
+ *
+ * @param {Object} options - The product details options.
+ * @param {string} [options.primaryImgUrl="https://placehold.co/400x500"] - The URL of the primary image.
+ * @param {string} [options.title="Unknown Product"] - The title of the product.
+ * @param {number} [options.price=0] - The price of the product.
+ * @param {string} [options.description="This product doesn't have a discription"] - The description of the product.
+ * @param {string} [options.alt="No Description present"] - The alt text for the primary image.
+ * @returns {string} The HTML template for the product details.
+ */
 function detailsTemplate({
   primaryImgUrl = "https://placehold.co/400x500",
   title = "Unknown Product",
