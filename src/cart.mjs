@@ -247,10 +247,16 @@ function decreaseQuantity(items = [], id) {
   renderItems(newItems);
 }
 
-function renderCount(items = [], el) {
+/**
+ * Updates the text content of a given HTML element with the total quantity of items.
+ *
+ * @param {Array<CartProduct>} [items=[]] - An array of item objects, each containing a `quantity` property.
+ * @param {HTMLElement} [el=document.createElement()] - The HTML element whose text content will be updated.
+ */
+function renderCount(items = [], el = document.createElement()) {
   const newCount = items.reduce((total, item) => {
     return total + item.quantity;
   }, 0);
 
-  el.innerHTML = newCount;
+  el.textContent = newCount;
 }
