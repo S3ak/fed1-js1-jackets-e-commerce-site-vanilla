@@ -5,12 +5,15 @@ import { addToCart } from "./cart.mjs";
 const containerEl = document.querySelector("#js-products");
 const sortByEl = document.querySelector("#js-sort-by");
 
+// This is not optimum because we should have the products live in a service that can sync over mutliple HTML pages and
 let products = [];
 
 setup();
 
+// Eveyr page should have a custom startup event that we can choose to run certain javascript.
 function setup() {
   // Check if the containerEl and sortByEl elements exist in the DOM
+  // FIXME: This should be a function that accepts all DOM element that contain an ID with the predix JS
   if (!containerEl || !sortByEl) {
     // Log an error message if either element is missing
     console.error("JS cannot run!!!");
