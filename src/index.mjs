@@ -47,7 +47,7 @@ sortByEl.addEventListener("change", (event) => {
   }
 
   // NOTE: we need to rerender our sorted list now;
-  createProductsListEl(products);
+  renderProductsListEl(products);
 });
 
 async function getProducts() {
@@ -58,9 +58,10 @@ async function getProducts() {
     const response = await fetch(API_URL);
     const { data } = await response.json();
     products = data;
+    window.localStorage.setItem("products", JSON.stringify(products));
 
     sortByPriceDescending();
-    createProductsListEl(products);
+    renderProductsListEl(products);
   } catch (error) {
     console.error(ERROR_MESSAGE_DEFAULT, error?.message);
   }
@@ -149,7 +150,7 @@ function createLoadingSkeleton(count = 3) {
  * @param {number} list[].price - The price of the product.
  * @param {string} list[].description - The description of the product.
  */
-function createProductsListEl(list = []) {
+function renderProductsListEl(list = []) {
   clearNode(containerEl);
 
   list.forEach(({ id, title, image, price, description }) => {
@@ -185,4 +186,23 @@ function sortByPriceDescending(list = products) {
 
 function sortByPriceAscending(list = products) {
   list.sort((a, b) => b.price - a.price);
+}
+
+const searchInputNode = document.querySelector("#search");
+
+searchInputNode.addEventListener("input", (event) => {
+  const products = JSON.parse(window.localStorage.getItem("products"));
+  handleSearch(event, products);
+});
+
+function handleSearch(event, list) {
+  const val = event.target.value;
+
+  const filteredProducts = list.filter((product) => {
+    return product.title.toLowerCase().includes(val.trim().toLowerCase());
+  });
+
+  console.log("val >>>", val);
+  console.log("filteredProducts >>>", filteredProducts);
+  renderProductsListEl(filteredProducts);
 }

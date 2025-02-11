@@ -66,12 +66,20 @@ body {
 /* FIXME: APP layout */
 .l-header {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   width: 100%;
   max-width: 1200px;
   padding: 0.7rem 3rem;
   flex: 0;
   position: sticky;
+
+  .row {
+    justify-content: space-between;
+  }
+}
+
+.row {
+  display: flex;
 }
 /* FIXME: APP layout */
 main {
@@ -169,5 +177,23 @@ button:focus-visible {
   .product-image {
     margin-right: 0;
     margin-bottom: 20px;
+  }
+}
+
+.c-search {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid grey;
+  padding: 1rem;
+  margin: 1rem;
+  gap: 0.5rem;
+  min-height: 30px;
+  width: 100%;
+
+  label {
+  }
+
+  input {
+    max-width: 600px;
   }
 }
