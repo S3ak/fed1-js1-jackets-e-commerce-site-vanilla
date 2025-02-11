@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Outer Dimensional Drip - Product Detail</title>
+    <link rel="stylesheet" href="/src/style.css" />
+    <script defer type="module" src="/src/product-details.mjs"></script>
+    <script type="module" defer src="/src/cart.mjs"></script>
+  </head>
+  <body>
+    <header>
+      <a href="/"><h1>Outer Dimensional Drip</h1></a>
+      <button id="js-cart-toggle">
+        Cart <span id="js-cart-count">0</span>
+      </button>
+    </header>
+
+    <main>
+      <section
+        class="product-detail skeleton-product-detail"
+        id="js-product-details"
+      >
+        <div class="skeleton-product-images">
+          <div class="skeleton-main-image"></div>
+          <div class="skeleton-thumbnail-container">
+            <div class="skeleton-thumbnail"></div>
+            <div class="skeleton-thumbnail"></div>
+            <div class="skeleton-thumbnail"></div>
+          </div>
+        </div>
+
+        <div class="skeleton-product-info">
+          <h2></h2>
+          <p class="skeleton-price"></p>
+          <p class="skeleton-description"></p>
+
+          <form class="skeleton-purchase-options" name="add-to-cart">
+            <label for="size">Size:</label>
+            <select id="size" name="size">
+              <option value="s">Small</option>
+              <option value="m">Medium</option>
+              <option value="l">Large</option>
+              <option value="xl">XL</option>
+            </select>
+
+            <label for="quantity">Quantity:</label>
+            <input
+              type="number"
+              id="quantity"
+              name="quantity"
+              min="1"
+              value="1"
+            />
+
+            <button type="submit" class="skeleton-add-to-cart">
+              Add to Cart
+            </button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer>Made with ❤️ by Monde Sineke</footer>
+
+    <aside class="c-cart" id="js-cart">
+      <div class="c-cart-header">
+        <h2>Shopping Cart</h2>
+        <button class="c-close-cart" id="js-close-cart">&times;</button>
+      </div>
+      <div class="c-cart-items" id="js-cart-items"></div>
+      <div class="c-cart-footer">
+        <p>Total: <span id="js-cart-total">0</span></p>
+
+        <button class="c-add-to-cart">Checkout</button>
+        <button class="btn" id="js-clear-cart">Clear Cart</button>
+      </div>
+    </aside>
+  </body>
+</html>
