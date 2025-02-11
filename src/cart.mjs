@@ -75,6 +75,20 @@ function cartItemTemplate({
   `;
 }
 
+/**
+ * @typedef {Object} CartProduct
+ * @property {string} product.id - The unique identifier of the product.
+ * @property {string} product.imgUrl - The URL of the product image.
+ * @property {number} product.price - The price of the product.
+ * @property {string} product.title - The title of the product.
+ * @property {number} [product.quantity=1] - The quantity of the product to add to the cart.
+ */
+
+/**
+ * Adds a product to the cart. If the product already exists in the cart, it updates the quantity.
+ *
+ * @param {CartProduct} CartProduct - The product to add to the cart.
+ */
 export function addToCart({ id, imgUrl, price, title, quantity = 1 }) {
   const products = getItemsFromStorage();
 
