@@ -63,12 +63,25 @@ body {
   min-height: 100vh;
 }
 
+/* FIXME: APP layout */
 .l-header {
   display: flex;
   justify-content: space-between;
   width: 100%;
   max-width: 1200px;
   padding: 0.7rem 3rem;
+  flex: 0;
+  position: sticky;
+}
+/* FIXME: APP layout */
+main {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* FIXME: APP layout */
+footer {
+  flex: 0;
 }
 
 h1 {

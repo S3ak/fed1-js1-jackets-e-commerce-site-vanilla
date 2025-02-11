@@ -6,6 +6,7 @@ const cartCloseBtnEl = document.querySelector("#js-close-cart");
 const cartItemsEl = document.querySelector("#js-cart-items");
 const clearCartBtnEl = document.querySelector("#js-clear-cart");
 const totalEl = document.querySelector("#js-cart-total");
+const cartCounterEl = document.querySelector("#js-cart-count");
 
 setup();
 
@@ -16,7 +17,8 @@ function setup() {
     !cartEl ||
     !cartCloseBtnEl ||
     !cartItemsEl ||
-    !clearCartBtnEl
+    !clearCartBtnEl ||
+    !cartCounterEl
   ) {
     // Log an error message if either element is missing
     console.error("JS cannot run!!!");
@@ -73,7 +75,7 @@ function cartItemTemplate({
   `;
 }
 
-export function addToCart({ id, imgUrl, price, title }) {
+export function addToCart({ id, imgUrl, price, title, quantity = 1 }) {
   const products = getItemsFromStorage();
 
   // Remeber findIndex qill give us -1 if nothing is found.
@@ -89,10 +91,11 @@ export function addToCart({ id, imgUrl, price, title }) {
       title,
       imgUrl,
       price,
-      quantity: 1,
+      quantity: quantity,
     });
+    // NOTE: IF there is a product already in the cart we need to update the existing quantity
   } else {
-    products[foundProductIndex].quantity++;
+    products[foundProductIndex].quantity += quantity;
   }
 
   setItemsToStorage(products);
@@ -173,6 +176,7 @@ function renderItems(items = []) {
   });
 
   const total = calcTotal(items);
+  renderCount(items, cartCounterEl);
   renderTotal(total, totalEl);
 }
 
@@ -219,4 +223,12 @@ function decreaseQuantity(items = [], id) {
   setItemsToStorage(newItems);
 
   renderItems(newItems);
+}
+
+function renderCount(items = [], el) {
+  const newCount = items.reduce((total, item) => {
+    return total + item.quantity;
+  }, 0);
+
+  el.innerHTML = newCount;
 }

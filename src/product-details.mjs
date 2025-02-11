@@ -1,4 +1,5 @@
 import { CURRENCY, ERROR_MESSAGE_DEFAULT, API_URL } from "./constants.mjs";
+import { addToCart } from "./cart.mjs";
 import {
   areDOMElementPresent,
   clearNode,
@@ -6,7 +7,7 @@ import {
   getDOMElements,
 } from "./utils.mjs";
 
-const DOMElements = getDOMElements(["#js-product-details"]);
+const DOMElements = getDOMElements(["#js-product-details"], document);
 const [containerEl] = DOMElements;
 
 setup();
@@ -29,22 +30,7 @@ function setup() {
       return;
     }
 
-    /**
-     * Extracts the 'id' parameter from the URL's query string.
-     * @url https://mollify.noroff.dev/content/feu1/javascript-1/module-5/api-advanced/url-parameters?nav=
-     */
-    const parameterString = window.location.search;
-
-    /**
-     * Creates a URLSearchParams object to work with the query parameters.
-     */
-    const searchParameters = new URLSearchParams(parameterString);
-
-    /**
-     * Retrieves the value of the 'id' parameter from the query string above.
-     * @type {string | null}
-     */
-    const id = searchParameters.get("id");
+    const id = getIdFromUrl();
 
     renderProductDetails(id, containerEl);
   } catch (error) {
@@ -108,8 +94,9 @@ async function renderProductDetails(productId, containerEl) {
   });
 
   const detailsEl = createHTML(template);
+  const detailsElWithListener = addFormHandlerToDetailsEl(detailsEl);
   clearNode(containerEl);
-  containerEl.appendChild(detailsEl);
+  containerEl.appendChild(detailsElWithListener);
 }
 
 /**
@@ -124,6 +111,7 @@ async function renderProductDetails(productId, containerEl) {
  * @returns {string} The HTML template for the product details.
  */
 function detailsTemplate({
+  id = "",
   primaryImgUrl = "https://placehold.co/400x500",
   title = "Unknown Product",
   price = 0,
@@ -145,7 +133,11 @@ function detailsTemplate({
         <p class="price">${price} ${CURRENCY}</p>
         <p class="description">${description}</p>
 
-        <form class="purchase-options">
+        <form class="purchase-options" name="addToCartForm">
+           <input name="id" value="${id}" hidden/>
+           <input name="imgUrl" value="${primaryImgUrl}" hidden/>
+           <input name="price" value="${price}" hidden/>
+           <input name="title" value="${title}" hidden/>
           <label for="size">Size:</label>
           <select id="size" name="size">
             <option value="s">Small</option>
@@ -168,4 +160,46 @@ function detailsTemplate({
       </div>
     </article>
   `;
+}
+
+function handleFormSubmit(event) {
+  // NB: Prevent the form from refreshing the page;
+  event.preventDefault();
+
+  const formData = new FormData(event.target);
+
+  addToCart({
+    id: getIdFromUrl(),
+    imgUrl: formData.get("imgUrl"),
+    price: formData.get("price"),
+    title: formData.get("title"),
+    quantity: Number(formData.get("quantity")),
+  });
+}
+
+function getIdFromUrl() {
+  /**
+   * Extracts the 'id' parameter from the URL's query string.
+   * @url https://mollify.noroff.dev/content/feu1/javascript-1/module-5/api-advanced/url-parameters?nav=
+   */
+  const parameterString = window.location.search;
+
+  /**
+   * Creates a URLSearchParams object to work with the query parameters.
+   */
+  const searchParameters = new URLSearchParams(parameterString);
+
+  /**
+   * Retrieves the value of the 'id' parameter from the query string above.
+   * @type {string | null}
+   */
+  const id = searchParameters.get("id");
+
+  return id;
+}
+
+function addFormHandlerToDetailsEl(detailsEl = document.createElement()) {
+  const addToCartForm = detailsEl.querySelector("form");
+  addToCartForm.addEventListener("submit", handleFormSubmit);
+  return detailsEl;
 }

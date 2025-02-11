@@ -75,7 +75,10 @@ function productTemplate({
   description = "Missing description",
   index,
 }) {
-  const detailsUrl = `/product-details.html?id=${id}`;
+  const paramsString = `id=${id}&title=${title}&imgUrl=${imgUrl}`;
+  const searchParams = new URLSearchParams(paramsString);
+  const detailsUrl = `/product-details.html?${searchParams.toString()}`;
+
   return `
     <article class="c-product-preview-details animate__animated animate__fadeInUp animate__delay-${index}s">
       <div class="c-product-preview-image">
@@ -146,7 +149,7 @@ function createLoadingSkeleton(count = 3) {
  * @param {number} list[].price - The price of the product.
  * @param {string} list[].description - The description of the product.
  */
-function createProductsListEl(list = products) {
+function createProductsListEl(list = []) {
   clearNode(containerEl);
 
   list.forEach(({ id, title, image, price, description }) => {

@@ -29,7 +29,7 @@ export function clearNode(el) {
  * @author S3ak
  * @description We need a function to check that all the DOM elements that will be maniupulated by our javascript are present. This is a rudementry dependency check. The reason we have this code is to make testing the code easier to debug;
  */
-export const getDOMElements = (ids = [], container) => {
+export const getDOMElements = (ids = [], container = document) => {
   if (!Array.isArray(ids) || !ids.every((id) => typeof id === "string")) {
     throw new Error("All IDs must be strings");
   }
