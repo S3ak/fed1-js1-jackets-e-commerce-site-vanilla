@@ -70,3 +70,23 @@ export const areDOMElementPresent = (elements = []) => {
 
   return elements.length > 0;
 };
+
+/**
+ * Stores a value in the local storage with the specified key.
+ *
+ * @param {string} key - The key under which the value will be stored.
+ * @param {*} value - The value to be stored in local storage.
+ */
+export function setLocalItem(key = "", value) {
+  window.localStorage.setItem(key, value);
+}
+
+/**
+ * Retrieves an item from the local storage and parses it as JSON.
+ *
+ * @param {string} [key=""] - The key of the item to retrieve from local storage.
+ * @returns {any} The parsed JSON object from local storage, or null if the key does not exist.
+ */
+export function getLocalItem(key = "") {
+  return JSON.parse(window.localStorage.getItem(key));
+}

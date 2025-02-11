@@ -1,9 +1,22 @@
-import { createHTML, clearNode } from "./utils.mjs";
-import { API_URL, ERROR_MESSAGE_DEFAULT, CURRENCY } from "./constants.mjs";
+import { createHTML, clearNode, getLocalItem } from "./utils.mjs";
+import { API_URL, ERROR_MESSAGE_DEFAULT } from "./constants.mjs";
 import { addToCart } from "./cart.mjs";
+import { createLoadingSkeleton } from "./home/product-skeleton-template.mjs";
+import productTemplate from "./products/product-template.mjs";
 
 const containerEl = document.querySelector("#js-products");
 const sortByEl = document.querySelector("#js-sort-by");
+const searchInputNode = document.querySelector("#search");
+
+/**
+ * @typedef {Object} ProductDetails
+ * @property {string} title - The name of the product.
+ * @property {number} price - The sell price of a product.
+ * @property {string} description - The description of the product.
+ * @property {Object} image - The image object.
+ * @property {string} image.url - The URL of the primary image.
+ * @property {string} image.alt - The alt text for the primary image.
+ */
 
 // This is not optimum because we should have the products live in a service that can sync over mutliple HTML pages and
 let products = [];
@@ -14,7 +27,7 @@ setup();
 function setup() {
   // Check if the containerEl and sortByEl elements exist in the DOM
   // FIXME: This should be a function that accepts all DOM element that contain an ID with the predix JS
-  if (!containerEl || !sortByEl) {
+  if (!containerEl || !sortByEl || !searchInputNode) {
     // Log an error message if either element is missing
     console.error("JS cannot run!!!");
   } else {
@@ -52,12 +65,11 @@ sortByEl.addEventListener("change", (event) => {
 
 async function getProducts() {
   clearNode(containerEl);
-  createLoadingSkeleton();
+  createLoadingSkeleton(containerEl);
 
   try {
     const response = await fetch(API_URL);
-    const { data } = await response.json();
-    products = data;
+    const { data: products } = await response.json();
     window.localStorage.setItem("products", JSON.stringify(products));
 
     sortByPriceDescending();
@@ -65,77 +77,6 @@ async function getProducts() {
   } catch (error) {
     console.error(ERROR_MESSAGE_DEFAULT, error?.message);
   }
-}
-
-function productTemplate({
-  id,
-  title = "Unknown Item",
-  imgUrl,
-  imgAl,
-  price = 0,
-  description = "Missing description",
-  index,
-}) {
-  const paramsString = `id=${id}&title=${title}&imgUrl=${imgUrl}`;
-  const searchParams = new URLSearchParams(paramsString);
-  const detailsUrl = `/product-details.html?${searchParams.toString()}`;
-
-  return `
-    <article class="c-product-preview-details animate__animated animate__fadeInUp animate__delay-${index}s">
-      <div class="c-product-preview-image">
-        <a href=${detailsUrl}>
-          <img src="${imgUrl}" alt="${imgAl}" />
-        </a>  
-      </div>
-
-      <div class="c-product-preview-info">
-        <h1 class="c-product-preview-title">
-          <a href=${detailsUrl}>${title}</a>
-        </h1>
-
-        <div class="c-product-preview-rating">
-          <span>&#9733;</span>
-          <span>&#9733;</span>
-          <span>&#9733;</span>
-          <span>&#9733;</span>
-          <span>&#9734;</span>
-          <span>(123 reviews)</span>
-        </div>
-        <div class="c-product-preview-price">${price} ${CURRENCY}</div>
-        <div class="c-product-preview-description">
-          <p>
-            ${description}
-          </p>
-        </div>
-        <button class="c-add-to-cart" id="js-add-to-cart-${id}">Add to Cart</button>
-      </div>
-    </article>
- `;
-}
-
-function productSkeletonTemplate() {
-  return `
-  <article class="c-product-preview-details">
-    <div class="c-product-preview-image">
-      <div class="skeleton skeleton-image"></div>
-    </div>
-    <div class="c-product-preview-info">
-      <div class="skeleton skeleton-title"></div>
-      <div class="skeleton skeleton-rating"></div>
-      <div class="skeleton skeleton-price"></div>
-      <div class="skeleton skeleton-description"></div>
-      <div class="skeleton skeleton-button"></div>
-    </div>
-  </article>
- `;
-}
-
-function createLoadingSkeleton(count = 3) {
-  [...Array(count)].forEach(() => {
-    const template = productSkeletonTemplate();
-    const newEl = createHTML(template);
-    containerEl.append(newEl);
-  });
 }
 
 /**
@@ -188,21 +129,22 @@ function sortByPriceAscending(list = products) {
   list.sort((a, b) => b.price - a.price);
 }
 
-const searchInputNode = document.querySelector("#search");
-
 searchInputNode.addEventListener("input", (event) => {
-  const products = JSON.parse(window.localStorage.getItem("products"));
-  handleSearch(event, products);
+  const products = getLocalItem("products");
+
+  handleSearch(event.target.value, products);
 });
 
-function handleSearch(event, list) {
-  const val = event.target.value;
+/**
+ * Filters a list of products based on a search term and renders the filtered list.
+ *
+ * @param {string} [searchTerm=""] - The term to search for in the product titles.
+ * @param {Array<ProductDetails>} [list=[]] - The list of products to search through.
+ */
+function handleSearch(searchTerm = "", list = []) {
+  const filteredProducts = list.filter((product) =>
+    product.title.toLowerCase().includes(searchTerm.trim().toLowerCase()),
+  );
 
-  const filteredProducts = list.filter((product) => {
-    return product.title.toLowerCase().includes(val.trim().toLowerCase());
-  });
-
-  console.log("val >>>", val);
-  console.log("filteredProducts >>>", filteredProducts);
   renderProductsListEl(filteredProducts);
 }
