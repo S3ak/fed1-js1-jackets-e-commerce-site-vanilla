@@ -1,3 +1,20 @@
+/**
+ * This module handles the functionality of the shopping cart for an e-commerce site.
+ * It includes functions to add, remove, and update products in the cart, as well as
+ * rendering the cart items and calculating the total price.
+ *
+ * @module cart
+ */
+
+/**
+ * @typedef {Object} CartProduct
+ * @property {string} product.id - The unique identifier of the product.
+ * @property {string} product.imgUrl - The URL of the product image.
+ * @property {number} product.price - The price of the product.
+ * @property {string} product.title - The title of the product.
+ * @property {number} [product.quantity=1] - The quantity of the product to add to the cart.
+ */
+
 import { createHTML, clearNode } from "./utils.mjs";
 
 const cartToggleBtnEl = document.querySelector("#js-cart-toggle");
@@ -74,15 +91,6 @@ function cartItemTemplate({
    </div>
   `;
 }
-
-/**
- * @typedef {Object} CartProduct
- * @property {string} product.id - The unique identifier of the product.
- * @property {string} product.imgUrl - The URL of the product image.
- * @property {number} product.price - The price of the product.
- * @property {string} product.title - The title of the product.
- * @property {number} [product.quantity=1] - The quantity of the product to add to the cart.
- */
 
 /**
  * Adds a product to the cart. If the product already exists in the cart, it updates the quantity.
