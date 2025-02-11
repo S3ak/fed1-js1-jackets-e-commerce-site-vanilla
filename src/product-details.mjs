@@ -162,6 +162,12 @@ function detailsTemplate({
   `;
 }
 
+/**
+ * Handles the form submission event.
+ * Prevents the default form submission behavior and adds the product to the cart.
+ *
+ * @param {Event} event - The form submission event.
+ */
 function handleFormSubmit(event) {
   // NB: Prevent the form from refreshing the page;
   event.preventDefault();
@@ -177,7 +183,7 @@ function handleFormSubmit(event) {
   });
 }
 
-function getIdFromUrl() {
+const getIdFromUrl = () => {
   /**
    * Extracts the 'id' parameter from the URL's query string.
    * @url https://mollify.noroff.dev/content/feu1/javascript-1/module-5/api-advanced/url-parameters?nav=
@@ -196,7 +202,7 @@ function getIdFromUrl() {
   const id = searchParameters.get("id");
 
   return id;
-}
+};
 
 function addFormHandlerToDetailsEl(detailsEl = document.createElement()) {
   const addToCartForm = detailsEl.querySelector("form");

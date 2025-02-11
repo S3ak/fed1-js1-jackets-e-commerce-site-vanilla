@@ -1,3 +1,20 @@
+/**
+ * This module handles the functionality of the shopping cart for an e-commerce site.
+ * It includes functions to add, remove, and update products in the cart, as well as
+ * rendering the cart items and calculating the total price.
+ *
+ * @module cart
+ */
+
+/**
+ * @typedef {Object} CartProduct
+ * @property {string} product.id - The unique identifier of the product.
+ * @property {string} product.imgUrl - The URL of the product image.
+ * @property {number} product.price - The price of the product.
+ * @property {string} product.title - The title of the product.
+ * @property {number} [product.quantity=1] - The quantity of the product to add to the cart.
+ */
+
 import { createHTML, clearNode } from "./utils.mjs";
 
 const cartToggleBtnEl = document.querySelector("#js-cart-toggle");
@@ -75,6 +92,11 @@ function cartItemTemplate({
   `;
 }
 
+/**
+ * Adds a product to the cart. If the product already exists in the cart, it updates the quantity.
+ *
+ * @param {CartProduct} CartProduct - The product to add to the cart.
+ */
 export function addToCart({ id, imgUrl, price, title, quantity = 1 }) {
   const products = getItemsFromStorage();
 
@@ -225,10 +247,16 @@ function decreaseQuantity(items = [], id) {
   renderItems(newItems);
 }
 
-function renderCount(items = [], el) {
+/**
+ * Updates the text content of a given HTML element with the total quantity of items.
+ *
+ * @param {Array<CartProduct>} [items=[]] - An array of item objects, each containing a `quantity` property.
+ * @param {HTMLElement} [el=document.createElement()] - The HTML element whose text content will be updated.
+ */
+function renderCount(items = [], el = document.createElement()) {
   const newCount = items.reduce((total, item) => {
     return total + item.quantity;
   }, 0);
 
-  el.innerHTML = newCount;
+  el.textContent = newCount;
 }
