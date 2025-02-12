@@ -1,4 +1,4 @@
-import { createHTML, clearNode, getLocalItem } from "./utils.mjs";
+import { createHTML, clearNode, getLocalItem, setLocalItem } from "./utils.mjs";
 import { API_URL, ERROR_MESSAGE_DEFAULT } from "./constants.mjs";
 import { addToCart } from "./cart.mjs";
 import { createLoadingSkeleton } from "./home/product-skeleton-template.mjs";
@@ -8,8 +8,11 @@ const containerEl = document.querySelector("#js-products");
 const sortByEl = document.querySelector("#js-sort-by");
 const searchInputNode = document.querySelector("#search");
 
+const PRODUCTS_KEY = "products";
+
 /**
  * @typedef {Object} ProductDetails
+ * @property {string} id - Unique identifer.
  * @property {string} title - The name of the product.
  * @property {number} price - The sell price of a product.
  * @property {string} description - The description of the product.
@@ -18,13 +21,10 @@ const searchInputNode = document.querySelector("#search");
  * @property {string} image.alt - The alt text for the primary image.
  */
 
-// This is not optimum because we should have the products live in a service that can sync over mutliple HTML pages and
-let products = [];
-
 setup();
 
 // Eveyr page should have a custom startup event that we can choose to run certain javascript.
-function setup() {
+async function setup() {
   // Check if the containerEl and sortByEl elements exist in the DOM
   // FIXME: This should be a function that accepts all DOM element that contain an ID with the predix JS
   if (!containerEl || !sortByEl || !searchInputNode) {
@@ -32,7 +32,12 @@ function setup() {
     console.error("JS cannot run!!!");
   } else {
     // If both elements exist, call the setup function to initialize the application
-    getProducts();
+    createLoadingSkeleton(containerEl);
+
+    const { products } = await fetchProductsFromAPI();
+    const sortedProducts = sortByPrice(products);
+
+    renderProductsListEl(sortedProducts);
   }
 }
 
@@ -50,48 +55,29 @@ function setup() {
  */
 sortByEl.addEventListener("change", (event) => {
   const val = event.target.value;
+  /** @type {Array<ProductDetails>} */
+  const products = getLocalItem(PRODUCTS_KEY);
 
-  // Sort productlist by price - low to high
-  if (val === "asc") {
-    sortByPriceDescending();
-    // Sort productlist by price - high to low
-  } else if (val === "dec") {
-    sortByPriceAscending();
-  }
+  const sortedProducts = sortByPrice(val, products);
 
   // NOTE: we need to rerender our sorted list now;
-  renderProductsListEl(products);
+  renderProductsListEl(sortedProducts);
 });
 
-async function getProducts() {
-  clearNode(containerEl);
-  createLoadingSkeleton(containerEl);
+searchInputNode.addEventListener("input", (event) => {
+  // FIXME: this should come from the service products.items;
+  const products = getLocalItem(PRODUCTS_KEY);
 
-  try {
-    const response = await fetch(API_URL);
-    const { data: products } = await response.json();
-    window.localStorage.setItem("products", JSON.stringify(products));
-
-    sortByPriceDescending();
-    renderProductsListEl(products);
-  } catch (error) {
-    console.error(ERROR_MESSAGE_DEFAULT, error?.message);
-  }
-}
+  handleSearch(event.target.value, products);
+});
 
 /**
  * Creates and appends a list of product elements to the container element.
  *
- * @param {Array} [list=products] - The list of products to display. Each product should be an object with the following properties:
- * @param {string} list[].id - The unique identifier for the product.
- * @param {string} list[].title - The title of the product.
- * @param {Object} list[].image - The image object for the product.
- * @param {string} list[].image.url - The URL of the product image.
- * @param {string} list[].image.alt - The alt text for the product image.
- * @param {number} list[].price - The price of the product.
- * @param {string} list[].description - The description of the product.
+ * @param {Array<ProductDetails>} [list=[]] - The list of products to display. Each product should be an object with the following properties:
  */
 function renderProductsListEl(list = []) {
+  // TODO: Make this a pure function
   clearNode(containerEl);
 
   list.forEach(({ id, title, image, price, description }) => {
@@ -121,20 +107,6 @@ function renderProductsListEl(list = []) {
   });
 }
 
-function sortByPriceDescending(list = products) {
-  list.sort((a, b) => a.price - b.price);
-}
-
-function sortByPriceAscending(list = products) {
-  list.sort((a, b) => b.price - a.price);
-}
-
-searchInputNode.addEventListener("input", (event) => {
-  const products = getLocalItem("products");
-
-  handleSearch(event.target.value, products);
-});
-
 /**
  * Filters a list of products based on a search term and renders the filtered list.
  *
@@ -147,4 +119,44 @@ function handleSearch(searchTerm = "", list = []) {
   );
 
   renderProductsListEl(filteredProducts);
+}
+
+async function fetchProductsFromAPI(url = API_URL) {
+  /** @type {Array<ProductDetails>} */
+  let products = [];
+  let error = null;
+
+  try {
+    const response = await fetch(url);
+    const { data } = await response.json();
+    products = data;
+    setLocalItem(PRODUCTS_KEY, products);
+  } catch (err) {
+    console.error(ERROR_MESSAGE_DEFAULT, error?.message);
+    error = err;
+  }
+
+  return {
+    products,
+    error,
+  };
+}
+
+/**
+ * Sorts an array of objects by their price property in descending order.
+ *
+ * @param {Array<ProductDetails>} list - The array of objects to be sorted. Each object should have a `price` property.
+ * @param {"asc" | "desc"} direction - The array of objects to be sorted. Each object should have a `price` property.
+ * @returns {Array<ProductDetails>} The sorted array with objects ordered by price in descending order.
+ */
+function sortByPrice(list = [], direction = "asc") {
+  let sortedList = [];
+
+  if (direction === "asc") {
+    sortedList = list.sort((a, b) => b.price - a.price);
+  } else {
+    sortedList = list.sort((a, b) => a.price - b.price);
+  }
+
+  return sortedList;
 }
