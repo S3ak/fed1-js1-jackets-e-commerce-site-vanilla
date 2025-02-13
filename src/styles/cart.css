@@ -1,5 +1,6 @@
 .c-cart {
   position: fixed;
+  z-index: 500;
   top: 0;
   right: 0;
   min-width: 396px;
