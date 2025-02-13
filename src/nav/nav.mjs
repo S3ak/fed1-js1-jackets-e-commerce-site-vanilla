@@ -1,59 +1,67 @@
 import { clearNode, createHTML } from "../utils.mjs";
 
 const containerEl = document.querySelector("#js-nav-container");
-const headerEl = document.querySelector("header");
-const cartEl = document.querySelector("#js-cart-toggle");
 const titleSectionEl = document.querySelector("#js-title-section");
 
 const url = window.location.pathname;
 
-const navTemplate = `<a href="/" class="c-nav-link ${getActive(url, "/")}">Products</a>
-          <a href="/about.html" class="c-nav-link ${getActive(url, "/about.html")}">About</a>
-          <a href="/contact.html" class="c-nav-link ${getActive(url, "/contact.html")}">Contact</a>`;
+const navItems = [
+  { label: "Home", href: "/", isActive: true },
+  { label: "About", href: "/about.html", isActive: false },
+  { label: "Contact Us", href: "/contact.html", isActive: false },
+];
+
+const navTemplate = `
+  <nav>
+    ${navItems
+      .map(({ href, label }) => {
+        return `<a href="${href}" class="c-nav-link ${getActive(url, href)}">${label}</a>`;
+      })
+      .join("")}
+  </nav>`;
 
 const desktopTemplate = `
-    <nav class="c-nav-container c-nav--desktop">
-        ${navTemplate}
-    </nav>`;
+    <section class="c-nav-container c-nav--desktop">
+      ${navTemplate}
+    </section>`;
 
 const mobileTemplate = `
     <aside id="js-aside-menu" class="c-nav-container c-nav--mobile">
         <button id="js-menu-close">Close</button>
-        <nav>
-            ${desktopTemplate}
-        </nav>
+        ${navTemplate}
     </aside>
 `;
 
-const menuToggle = `<button>X</button>`;
+const menuToggleTemplate = `<button>X</button>`;
 
 const desktopNavEl = createHTML(desktopTemplate);
 const mobileNavEl = createHTML(mobileTemplate);
-const menuToggleEl = createHTML(menuToggle);
+const menuToggleEl = createHTML(menuToggleTemplate);
 
 renderNav();
 
 mobileNavEl.querySelector("button").addEventListener("click", onMenuToggle);
 
-window.addEventListener("resize", () => {
-  renderNav();
-});
+window.addEventListener("resize", renderNav);
 
 function renderNav() {
-  if (window.innerWidth < 800) {
-    clearNode(containerEl);
+  let navEl = document.createElement("span");
+  const isBelowMobileBreakpoint = window.innerWidth < 800;
 
+  clearNode(containerEl);
+
+  if (isBelowMobileBreakpoint) {
     menuToggleEl.addEventListener("click", onMenuToggle);
 
     titleSectionEl.insertBefore(menuToggleEl, null);
-    containerEl.append(mobileNavEl);
+    navEl = mobileNavEl;
   } else {
     // Remove the menu button;
-    clearNode(containerEl);
-
     menuToggleEl.remove();
-    containerEl.append(desktopNavEl);
+    navEl = desktopNavEl;
   }
+
+  containerEl.append(navEl);
 }
 
 function getActive(currentUrl, page) {
