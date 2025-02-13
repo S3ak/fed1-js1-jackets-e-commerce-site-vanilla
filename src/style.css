@@ -78,13 +78,25 @@ body {
   }
 }
 
+.c-title-section {
+  gap: 2rem;
+}
+
 .row {
   display: flex;
 }
+
+header {
+  position: relative;
+  z-index: 300;
+}
+
 /* FIXME: APP layout */
 main {
   flex: 1;
   overflow-y: auto;
+  position: relative;
+  z-index: 100;
 }
 
 /* FIXME: APP layout */
@@ -195,5 +207,49 @@ button:focus-visible {
 
   input {
     max-width: 600px;
+  }
+}
+
+.c-nav-container {
+  display: flex;
+  gap: 2rem;
+  position: fixed;
+  z-index: 900;
+  top: 0;
+  right: 0;
+  height: 100dvh;
+  width: 80vw;
+  min-width: 280px;
+  background-color: #242424;
+  padding: 3rem;
+}
+
+.c-nav--mobile {
+  transform: translateX(100%);
+  transition: transform 100ms;
+  display: flex;
+  flex-direction: column;
+
+  nav {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.c-nav--mobile.is-open {
+  transform: translateX(0);
+}
+
+.c-nav--desktop {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+
+.c-nav-link {
+  color: white;
+
+  &.is-active {
+    color: blue;
   }
 }
