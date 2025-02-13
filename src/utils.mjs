@@ -78,7 +78,7 @@ export const areDOMElementPresent = (elements = []) => {
  * @param {*} value - The value to be stored in local storage.
  */
 export function setLocalItem(key = "", value) {
-  window.localStorage.setItem(key, value);
+  window.localStorage.setItem(key, JSON.stringify(value));
 }
 
 /**

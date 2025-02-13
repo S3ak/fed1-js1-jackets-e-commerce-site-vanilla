@@ -1,11 +1,11 @@
-import { CURRENCY, ERROR_MESSAGE_DEFAULT, API_URL } from "./constants.mjs";
-import { addToCart } from "./cart.mjs";
+import { CURRENCY, ERROR_MESSAGE_DEFAULT, API_URL } from "../constants.mjs";
+import { addToCart } from "../cart.mjs";
 import {
   areDOMElementPresent,
   clearNode,
   createHTML,
   getDOMElements,
-} from "./utils.mjs";
+} from "../utils.mjs";
 
 const DOMElements = getDOMElements(["#js-product-details"], document);
 const [containerEl] = DOMElements;
