@@ -38,38 +38,40 @@ async function setup() {
     const sortedProducts = sortByPrice(products);
 
     renderProductsListEl(sortedProducts);
+
+    containerEl.addEventListener("click", onProductClick);
+
+    /**
+     * Event listener for the 'change' event on the sortByEl element.
+     * This function sorts the product list based on the selected value.
+     *
+     * @param {Event} event - The change event triggered by the sortByEl element.
+     *
+     * The function checks the value of the event target:
+     * - If the value is "asc", it calls sortByPriceDescending() to sort the product list by price in descending order.
+     * - If the value is "dec", it calls sortByPriceAscending() to sort the product list by price in ascending order.
+     *
+     * After sorting, it calls createProductsListEl(products) to rerender the sorted product list.
+     */
+    sortByEl.addEventListener("change", (event) => {
+      const val = event.target.value;
+      /** @type {Array<ProductDetails>} */
+      const products = getLocalItem(PRODUCTS_KEY);
+
+      const sortedProducts = sortByPrice(val, products);
+
+      // NOTE: we need to rerender our sorted list now;
+      renderProductsListEl(sortedProducts);
+    });
+
+    searchInputNode.addEventListener("input", (event) => {
+      // FIXME: this should come from the service products.items;
+      const products = getLocalItem(PRODUCTS_KEY);
+
+      handleSearch(event.target.value, products);
+    });
   }
 }
-
-/**
- * Event listener for the 'change' event on the sortByEl element.
- * This function sorts the product list based on the selected value.
- *
- * @param {Event} event - The change event triggered by the sortByEl element.
- *
- * The function checks the value of the event target:
- * - If the value is "asc", it calls sortByPriceDescending() to sort the product list by price in descending order.
- * - If the value is "dec", it calls sortByPriceAscending() to sort the product list by price in ascending order.
- *
- * After sorting, it calls createProductsListEl(products) to rerender the sorted product list.
- */
-sortByEl.addEventListener("change", (event) => {
-  const val = event.target.value;
-  /** @type {Array<ProductDetails>} */
-  const products = getLocalItem(PRODUCTS_KEY);
-
-  const sortedProducts = sortByPrice(val, products);
-
-  // NOTE: we need to rerender our sorted list now;
-  renderProductsListEl(sortedProducts);
-});
-
-searchInputNode.addEventListener("input", (event) => {
-  // FIXME: this should come from the service products.items;
-  const products = getLocalItem(PRODUCTS_KEY);
-
-  handleSearch(event.target.value, products);
-});
 
 /**
  * Creates and appends a list of product elements to the container element.
@@ -91,17 +93,7 @@ function renderProductsListEl(list = []) {
     });
 
     const newEl = createHTML(template);
-    // FIXME: Use data attribute
-    const btn = newEl.querySelector("button");
-
-    btn.addEventListener("click", () => {
-      addToCart({
-        id,
-        title,
-        imgUrl: image.url,
-        price,
-      });
-    });
+    // We dont' add the event listener to the product "add to cart" button because we will have one listener on the list container element
 
     containerEl.append(newEl);
   });
@@ -159,4 +151,38 @@ function sortByPrice(list = [], direction = "asc") {
   }
 
   return sortedList;
+}
+
+/**
+ * Handles the click event on a product item.
+ *
+ * This function determines if the clicked element is a button or an image within a product item.
+ * If a button is clicked, it adds the corresponding product to the cart.
+ * If an image is clicked, it logs a message to navigate to the product details page.
+ *
+ * @param {Event} event - The click event object.
+ */
+function onProductClick(event) {
+  const target = event.target;
+  /** @type {HTMLElement | undefined} */
+  const container = target.closest("[data-component='productPreviewDetails']");
+  const productId = container?.dataset?.productid;
+
+  if (target.tagName === "BUTTON" && container) {
+    /** @type {Array<ProductDetails>} */
+    const products = getLocalItem(PRODUCTS_KEY);
+    const foundProduct = products.find((p) => p.id === productId);
+
+    if (foundProduct) {
+      addToCart({
+        id: foundProduct.id,
+        title: foundProduct.title,
+        imgUrl: foundProduct.image.url,
+        price: foundProduct.price,
+      });
+    }
+  } else if (target.tagName === "IMG" && container) {
+    // Handle image click, e.g., navigate to product details page
+    console.log(`Navigate to product details for product ID: ${productId}`);
+  }
 }
