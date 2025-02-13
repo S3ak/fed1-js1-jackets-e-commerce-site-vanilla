@@ -138,7 +138,7 @@ function removeProductItem(items = [], selectedItemId) {
   renderItems(filteredItems);
 }
 
-function calcTotal(items = []) {
+export function calcTotal(items = []) {
   let newTotal = 0;
 
   if (items.length > 0) {
@@ -202,7 +202,7 @@ function renderItems(items = []) {
   renderTotal(total, totalEl);
 }
 
-function getItemsFromStorage() {
+export function getItemsFromStorage() {
   return JSON.parse(window.localStorage.getItem("cart")) ?? [];
 }
 

@@ -6,9 +6,9 @@ const titleSectionEl = document.querySelector("#js-title-section");
 const url = window.location.pathname;
 
 const navItems = [
-  { label: "Home", href: "/", isActive: true },
-  { label: "About", href: "/about.html", isActive: false },
-  { label: "Contact Us", href: "/contact.html", isActive: false },
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about.html" },
+  { label: "Contact Us", href: "/contact.html" },
 ];
 
 const navTemplate = `
