@@ -145,9 +145,9 @@ function sortByPrice(list = [], direction = "asc") {
   let sortedList = [];
 
   if (direction === "asc") {
-    sortedList = list.sort((a, b) => b.price - a.price);
+    sortedList = list.toSorted((a, b) => b.price - a.price);
   } else {
-    sortedList = list.sort((a, b) => a.price - b.price);
+    sortedList = list.toSorted((a, b) => a.price - b.price);
   }
 
   return sortedList;
@@ -182,7 +182,7 @@ function onProductClick(event) {
       });
     }
   } else if (target.tagName === "IMG" && container) {
-    // Handle image click, e.g., navigate to product details page
+    // The anchor tag will navigate the user. AS long as we dont use e.preventDefault();
     console.log(`Navigate to product details for product ID: ${productId}`);
   }
 }
