@@ -38,7 +38,7 @@ function setup() {
     !cartCounterEl
   ) {
     // Log an error message if either element is missing
-    console.error("JS cannot run!!!");
+    console.error("Elements are not avalible");
   } else {
     // If both elements exist, call the setup function to initialize the application
 
@@ -125,7 +125,7 @@ export function addToCart({ id, imgUrl, price, title, quantity = 1 }) {
   renderItems(products);
 }
 
-function clearCart() {
+export function clearCart() {
   setItemsToStorage([]);
   renderItems([]);
 }
@@ -206,7 +206,7 @@ export function getItemsFromStorage() {
   return JSON.parse(window.localStorage.getItem("cart")) ?? [];
 }
 
-function setItemsToStorage(items = []) {
+export function setItemsToStorage(items = []) {
   window.localStorage.setItem("cart", JSON.stringify(items));
 }
 
