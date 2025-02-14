@@ -2,7 +2,7 @@ import { createHTML, clearNode, getLocalItem, setLocalItem } from "./utils.mjs";
 import { API_URL, ERROR_MESSAGE_DEFAULT } from "./constants.mjs";
 import { addToCart } from "./cart.mjs";
 import { createLoadingSkeleton } from "./home/product-skeleton-template.mjs";
-import productTemplate from "./products/product-template.mjs";
+import createProductTemplate from "./products/product-template.mjs";
 
 const containerEl = document.querySelector("#js-products");
 const sortByEl = document.querySelector("#js-sort-by");
@@ -39,7 +39,7 @@ async function setup() {
 
     renderProductsListEl(sortedProducts);
 
-    containerEl.addEventListener("click", onProductClick);
+    containerEl.addEventListener("click", onAddToCart);
 
     /**
      * Event listener for the 'change' event on the sortByEl element.
@@ -83,7 +83,7 @@ function renderProductsListEl(list = []) {
   clearNode(containerEl);
 
   list.forEach(({ id, title, image, price, description }) => {
-    const template = productTemplate({
+    const productTemplate = createProductTemplate({
       id,
       title,
       imgUrl: image.url,
@@ -92,10 +92,11 @@ function renderProductsListEl(list = []) {
       description,
     });
 
-    const newEl = createHTML(template);
+    const productHTMLNode = createHTML(productTemplate);
+
     // We dont' add the event listener to the product "add to cart" button because we will have one listener on the list container element
 
-    containerEl.append(newEl);
+    containerEl.append(productHTMLNode);
   });
 }
 
@@ -162,13 +163,13 @@ function sortByPrice(list = [], direction = "asc") {
  *
  * @param {Event} event - The click event object.
  */
-function onProductClick(event) {
+function onAddToCart(event) {
   const target = event.target;
   /** @type {HTMLElement | undefined} */
-  const container = target.closest("[data-component='productPreviewDetails']");
-  const productId = container?.dataset?.productid;
+  const productId = target?.dataset?.id;
 
-  if (target.tagName === "BUTTON" && container) {
+  // This is to make sure we are clicking on the addToCart Button
+  if (target.tagName === "BUTTON" && target?.dataset?.id) {
     /** @type {Array<ProductDetails>} */
     const products = getLocalItem(PRODUCTS_KEY);
     const foundProduct = products.find((p) => p.id === productId);
@@ -181,8 +182,5 @@ function onProductClick(event) {
         price: foundProduct.price,
       });
     }
-  } else if (target.tagName === "IMG" && container) {
-    // The anchor tag will navigate the user. AS long as we dont use e.preventDefault();
-    console.log(`Navigate to product details for product ID: ${productId}`);
   }
 }

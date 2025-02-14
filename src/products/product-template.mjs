@@ -27,7 +27,7 @@ export default function productTemplate({
   const detailsUrl = `/product-details.html?${searchParams.toString()}`;
 
   return `
-    <article class="c-product-preview-details animate__animated animate__fadeInUp animate__delay-${index}s" data-productId="${id}" data-component="productPreviewDetails">
+    <article class="c-product-preview-details animate__animated animate__fadeInUp animate__delay-${index}s" data-component="productPreviewDetails">
       <div class="c-product-preview-image">
         <a href=${detailsUrl}>
           <img src="${imgUrl}" alt="${imgAl}" />
@@ -53,7 +53,7 @@ export default function productTemplate({
             ${description}
           </p>
         </div>
-        <button class="c-add-to-cart" id="js-add-to-cart-${id}">Add to Cart</button>
+        <button class="c-add-to-cart" data-id="${id}">Add to Cart</button>
       </div>
     </article>
  `;
