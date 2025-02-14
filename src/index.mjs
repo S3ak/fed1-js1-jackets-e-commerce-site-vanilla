@@ -34,10 +34,9 @@ async function setup() {
     // If both elements exist, call the setup function to initialize the application
     createLoadingSkeleton(containerEl);
 
-    const { products } = await fetchProductsFromAPI();
-    const sortedProducts = sortByPrice(products);
-
-    renderProductsListEl(sortedProducts);
+    // const { products } = await fetchProductsFromAPI();
+    const { products } = await sortBy();
+    renderProductsListEl(products);
 
     containerEl.addEventListener("click", onAddToCart);
 
@@ -53,15 +52,13 @@ async function setup() {
      *
      * After sorting, it calls createProductsListEl(products) to rerender the sorted product list.
      */
-    sortByEl.addEventListener("change", (event) => {
+    sortByEl.addEventListener("change", async (event) => {
       const direction = event.target.value;
-      /** @type {Array<ProductDetails>} */
-      const products = getLocalItem(PRODUCTS_KEY);
 
-      const sortedProducts = sortByPrice(products, direction);
+      const { products } = await sortBy(direction);
 
       // NOTE: we need to rerender our sorted list now;
-      renderProductsListEl(sortedProducts);
+      renderProductsListEl(products);
     });
 
     searchInputNode.addEventListener("input", (event) => {
@@ -139,19 +136,37 @@ async function fetchProductsFromAPI(url = API_URL) {
  * Sorts an array of objects by their price property in descending order.
  *
  * @param {Array<ProductDetails>} list - The array of objects to be sorted. Each object should have a `price` property.
- * @param {"asc" | "desc"} direction - The array of objects to be sorted. Each object should have a `price` property.
+ * @param {"asc" | "desc"} sortOrder - The array of objects to be sorted. Each object should have a `price` property.
  * @returns {Array<ProductDetails>} The sorted array with objects ordered by price in descending order.
  */
-function sortByPrice(list = [], direction = "asc") {
-  let sortedList = [];
+async function sortBy(sortOrder = "asc", sort = "price") {
+  const sortedProducts = await fetchProductsWithQuery(API_URL, sort, sortOrder);
+  return sortedProducts;
+}
 
-  if (direction === "asc") {
-    sortedList = list.toSorted((a, b) => a.price - b.price);
-  } else {
-    sortedList = list.toSorted((a, b) => b.price - a.price);
+async function fetchProductsWithQuery(url = API_URL, sort, sortOrder) {
+  /** @type {Array<ProductDetails>} */
+  let products = [];
+  let error = null;
+
+  const paramsString = `sort=${sort}&sortOrder=${sortOrder}`;
+  const searchParams = new URLSearchParams(paramsString);
+
+  try {
+    const newUrl = `${url}?${searchParams.toString()}`;
+    const response = await fetch(newUrl);
+    const { data } = await response.json();
+    products = data;
+    setLocalItem(PRODUCTS_KEY, products);
+  } catch (err) {
+    console.error(ERROR_MESSAGE_DEFAULT, error?.message);
+    error = err;
   }
 
-  return sortedList;
+  return {
+    products,
+    error,
+  };
 }
 
 /**
