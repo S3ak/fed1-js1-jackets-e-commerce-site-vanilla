@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout</title>
+    <link rel="stylesheet" href="/src/style.css" />
+    <link rel="stylesheet" href="/src/styles/checkout.css" />
+    <script type="module" defer src="/src/checkout/checkout.mjs"></script>
+  </head>
+  <body>
+    <header class="l-header">
+      <section id="js-nav-container"></section>
+      <section class="row c-title-section" id="js-title-section">
+        <a href="/"><h1>Checkout</h1></a>
+
+        <button id="js-cart-toggle" class="c-cart-btn">
+          Cart<span class="c-cart-btn-counter" id="js-cart-count">0</span>
+        </button>
+      </section>
+    </header>
+
+    <main>
+      <div class="checkout-container">
+        <div class="checkout-content">
+          <div class="order-summary">
+            <h3>Order Summary</h3>
+            <section id="js-order-summary">
+              <div class="product">
+                <p>Loading...</p>
+                <p>Loading...</p>
+              </div>
+            </section>
+            <hr />
+            <div class="total">
+              <p><strong>Total:</strong></p>
+              <p><strong id="js-total">Loading...</strong></p>
+            </div>
+          </div>
+
+          <div class="shipping-details">
+            <h3>Shipping Information</h3>
+
+            <form class="c-form-checkout" name="checkout" id="js-checkout-form">
+              <label for="name">Full Name</label>
+              <input
+                type="text"
+                name="name"
+                id="name"
+                minlength="2"
+                maxlength="32"
+                required
+              />
+
+              <label for="address">Address</label>
+              <input
+                type="text"
+                name="address"
+                id="address"
+                minlength="2"
+                maxlength="64"
+                required
+              />
+
+              <label for="city">City</label>
+              <input type="search" list="cities" name="city" id="city" />
+              <datalist id="cities">
+                <option value="Oslo"></option>
+                <option value="Bergen"></option>
+                <option value="Stavanger"></option>
+                <option value="Sandnes"></option>
+                <option value="Trondheim"></option>
+                <option value="Kristiansand"></option>
+                <option value="Sandvika"></option>
+                <option value="Drammen"></option>
+                <option value="Asker"></option>
+                <option value="Tønsberg"></option>
+                <option value="Ålesund"></option>
+                <option value="Skien"></option>
+                <option value="Lørenskog"></option>
+                <option value="Arendal"></option>
+                <option value="Haugesund"></option>
+                <option value="Sandefjord"></option>
+                <option value="Bodø"></option>
+                <option value="Tromsø"></option>
+                <option value="Hamar"></option>
+                <option value="Oppegård"></option>
+                <option value="Molde"></option>
+                <option value="Nesoddtangen"></option>
+                <option value="Rygge"></option>
+                <option value="Steinkjer"></option>
+                <option value="Kolbotn"></option>
+                <option value="Lillestrøm"></option>
+              </datalist>
+
+              <label for="zip">ZIP Code</label>
+              <input
+                type="text"
+                name="zip"
+                id="zip"
+                required
+                maxlength="4"
+                minlength="4"
+              />
+
+              <h3>Payment Method</h3>
+              <label>
+                <input
+                  type="radio"
+                  name="payment"
+                  value="credit-card"
+                  required
+                />
+                Credit Card
+              </label>
+              <label>
+                <input type="radio" name="payment" value="klarna" required />
+                Klarna
+              </label>
+              <label>
+                <input type="radio" name="payment" value="vipps" required />
+                Vipps
+              </label>
+
+              <div class="credit-card-info">
+                <label for="cardNumber">Card Number</label>
+                <input type="text" name="cardNumber" id="cardNumber" required />
+
+                <label for="card-name">Cardholder Name</label>
+                <input
+                  type="text"
+                  name="card-name"
+                  id="card-name"
+                  minlength="2"
+                  maxlength="32"
+                  required
+                />
+
+                <label for="expiry">Expiration Date</label>
+                <input
+                  type="month"
+                  name="expiry"
+                  id="expiry"
+                  placeholder="MM/YY"
+                  required
+                />
+
+                <label for="cvv">CVV</label>
+                <input
+                  type="text"
+                  name="cvv"
+                  id="cvv"
+                  required
+                  minlength="3"
+                  maxlength="3"
+                />
+              </div>
+
+              <button type="submit">Place Order</button>
+              <button type="reset">Reset</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

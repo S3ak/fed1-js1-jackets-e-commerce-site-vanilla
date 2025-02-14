@@ -23,7 +23,7 @@ const PRODUCTS_KEY = "products";
 
 setup();
 
-// Eveyr page should have a custom startup event that we can choose to run certain javascript.
+// Every page should have a custom startup event that we can choose to run certain javascript.
 async function setup() {
   // Check if the containerEl and sortByEl elements exist in the DOM
   // FIXME: This should be a function that accepts all DOM element that contain an ID with the predix JS
@@ -54,11 +54,11 @@ async function setup() {
      * After sorting, it calls createProductsListEl(products) to rerender the sorted product list.
      */
     sortByEl.addEventListener("change", (event) => {
-      const val = event.target.value;
+      const direction = event.target.value;
       /** @type {Array<ProductDetails>} */
       const products = getLocalItem(PRODUCTS_KEY);
 
-      const sortedProducts = sortByPrice(val, products);
+      const sortedProducts = sortByPrice(products, direction);
 
       // NOTE: we need to rerender our sorted list now;
       renderProductsListEl(sortedProducts);
@@ -145,9 +145,9 @@ function sortByPrice(list = [], direction = "asc") {
   let sortedList = [];
 
   if (direction === "asc") {
-    sortedList = list.toSorted((a, b) => b.price - a.price);
-  } else {
     sortedList = list.toSorted((a, b) => a.price - b.price);
+  } else {
+    sortedList = list.toSorted((a, b) => b.price - a.price);
   }
 
   return sortedList;

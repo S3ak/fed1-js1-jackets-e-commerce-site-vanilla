@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout</title>
+    <link rel="stylesheet" href="/src/style.css" />
+    <link rel="stylesheet" href="/src/styles/checkout.css" />
+    <script type="module" defer src="/src/checkout/checkout.mjs"></script>
+    <script
+      type="module"
+      defer
+      src="/src/order-confirmation/confirmation.mjs"
+    ></script>
+    <script type="module" defer src="/src/nav/nav.mjs"></script>
+  </head>
+  <body>
+    <header class="l-header">
+      <section id="js-nav-container"></section>
+      <section class="row c-title-section" id="js-title-section">
+        <a href="/"><h1>Order Confirmation</h1></a>
+      </section>
+    </header>
+
+    <main>
+      <div class="confirmation-container">
+        <h2>Thank You for Your Order!</h2>
+        <p>Your order has been successfully processed.</p>
+
+        <div class="order-details">
+          <h3>Order Summary</h3>
+
+          <section id="js-order-summary">
+            <div class="product">
+              <p>Loading...</p>
+              <p>Loading...</p>
+            </div>
+          </section>
+          <hr />
+          <div class="total">
+            <p><strong>Total:</strong></p>
+            <p><strong id="js-total">Loading...</strong></p>
+          </div>
+        </div>
+
+        <div class="shipping-info">
+          <h3>Shipping Information</h3>
+          <p><strong>Name:</strong> <span id="js-name">John Doe</span></p>
+          <p>
+            <strong>Address:</strong>
+            <span id="js-address">1234 Elm Street, City, ZIP</span>
+          </p>
+          <p><strong>Estimated Delivery:</strong>3-5 Business Days</p>
+        </div>
+
+        <a href="/"> Continue Shopping </a>
+      </div>
+    </main>
+  </body>
+</html>
