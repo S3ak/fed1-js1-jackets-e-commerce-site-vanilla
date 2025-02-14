@@ -23,7 +23,7 @@ const PRODUCTS_KEY = "products";
 
 setup();
 
-// Eveyr page should have a custom startup event that we can choose to run certain javascript.
+// Every page should have a custom startup event that we can choose to run certain javascript.
 async function setup() {
   // Check if the containerEl and sortByEl elements exist in the DOM
   // FIXME: This should be a function that accepts all DOM element that contain an ID with the predix JS
