@@ -1,20 +1,8 @@
 # fed1-js1-jackets-e-commerce-site-vanilla
 
-[Edit in StackBlitz next generation editor ⚡️](https://stackblitz.com/~/github.com/S3ak/fed1-js1-jackets-e-commerce-site-vanilla)
+[Edit in StackBlitz next generation editor ⚡️](https://stackblitz.com/~/github.com/S3ak/fed1-js1-jackets-e-commerce-site-vanilla).
 
-## Project Assets
-
-- [Stackblitz](https://stackblitz.com/~/github.com/S3ak/fed1-js1-jackets-e-commerce-site-vanilla)
-- [Production deploy](https://outerdimensionaldrip.vercel.app/)
-- [Staging deploy](https://outerdimensionaldrip.netlify.app)
-- [staging Deployment Dashboard](https://app.netlify.com/sites/outerdimensionaldrip/overview)
-- [Production Deployment Dashboard](https://vercel.com/monde-sinekes-projects/outerdimensionaldrip)
-- [Design Doc](https://www.figma.com/board/thVST2qvAmfqEFS3JjU3GU/FED-JS1-Jackets-E-commerce-website?node-id=0-1&t=MmdtghNgkkem48SX-1)
-- [Lo-Fi Design Spec]()
-- [Hi-Fi Design Spec]()
-- [API URL](https://docs.noroff.dev/docs/v2/e-commerce/rainy-days)
-- [Analytics dashboard](#TODO:@Mo)
-- [TODOS](https://github.com/S3ak/fed1-js1-jackets-e-commerce-site-vanilla/issues)
+Hi Hello. This is a project models how a graduate level developer can use HTML5, CSS3, and JS(es2025) vanilla website using a build tool which requires Node to be installed on the developers workstation (Laptop, PC). The project is a social media platoform site that relies on the [dummyjson API]('https://dummyjson.com/posts') API. The project is built with vanilla JS and Vite. The project is a monorepo with the featuring packages:
 
 ## Tech Stack
 
@@ -28,11 +16,25 @@
 - [Prettier](https://prettier.io/) - An opinionated code formatter
 - [Eslint](https://eslint.org/) - Find and fix problems in your JavaScript code
 
+## Project Assets
+
+- [Stackblitz](https://stackblitz.com/~/github.com/S3ak/social)
+- [Production deploy](https://outerdimensionaldrip.vercel.app/)
+- [Staging deploy](https://outerdimensionaldrip.netlify.app)
+- [staging Deployment Dashboard](https://app.netlify.com/sites/outerdimensionaldrip/overview)
+- [Production Deployment Dashboard](https://vercel.com/monde-sinekes-projects/outerdimensionaldrip)
+- [Design Doc](https://www.figma.com/board/thVST2qvAmfqEFS3JjU3GU/FED-JS1-Jackets-E-commerce-website?node-id=0-1&t=MmdtghNgkkem48SX-1)
+- [Lo-Fi Design Spec]()
+- [Hi-Fi Design Spec]()
+- [API URL](https://dummyjson.com/docs/posts)
+- [Analytics dashboard](#TODO:@Mo)
+- [TODOS](https://github.com/S3ak/social/issues)
+
 ## Resources
 
-## Project leads
+## Author and Contributors
 
-- Monde Sineke: <nkululeko.sineke@noroff.no> - Technical lead
+- Monde Sineke: <nsineke@gmail.com> - Technical lead
 
 ## Features
 
@@ -58,13 +60,12 @@ Staging is the enviroment where the team can test the latest features and bug fi
 <details>
   <summary>Quick Start</summary>
   
-- Checkout using VScode
-- press *F1* and type `git:clone`
-- Install packages
+- Checkout using VScode  and type `git:clone`
+- press *F1* (ctrl+shift+P) and type `git:clone`
+- Install packages (*F1*) and type `run task` and hit enter then type `npm` and hit enter then type `npm install` and hit enter.
 - press *F1* and type `run task` and hit enter.
-- type `npm` and hit enter.
-- type `install` and hit enter.
 - press *F5*
+- - press *F1* and type `create branch` and hit enter.
 
 </details>
 
@@ -100,9 +101,7 @@ npm run storybook
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+You can start editing the page by modifying `src/component.template.index`. The page auto-updates as you edit the file.
 
 ## Minimum acceptence criteria
 
