@@ -92,8 +92,30 @@ function createCartProductTemplate({ title, price, quantity }) {
 `;
 }
 
-async function sendToAPI(details) {
-  console.log("FORM details", details);
-  alert(JSON.stringify(details));
+/**
+ * @typedef {Object} AddProductResponse
+ * @property {string} id - Unique identifer.
+ */
+
+/**
+ * Sends the provided payload to the API.
+ *
+ * @param {Object} detailsPayload - The payload to be sent to the API.
+ * @returns {Promise<AddProductResponse|string>} The response from the API as a JSON object, or "Success" if an error occurs.
+ * @throws {Error} If the fetch operation fails.
+ */
+async function sendToAPI(detailsPayload) {
+  try {
+    const res = await fetch("https://dummyjson.com/products/add", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(detailsPayload),
+    });
+    const json = await res.json();
+
+    return json;
+  } catch (error) {
+    console.error(error?.message);
+  }
   return "Success";
 }
