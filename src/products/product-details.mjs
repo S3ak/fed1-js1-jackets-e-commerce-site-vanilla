@@ -183,7 +183,7 @@ function handleFormSubmit(event) {
   });
 }
 
-const getIdFromUrl = () => {
+function getIdFromUrl() {
   /**
    * Extracts the 'id' parameter from the URL's query string.
    * @url https://mollify.noroff.dev/content/feu1/javascript-1/module-5/api-advanced/url-parameters?nav=
@@ -202,7 +202,7 @@ const getIdFromUrl = () => {
   const id = searchParameters.get("id");
 
   return id;
-};
+}
 
 function addFormHandlerToDetailsEl(detailsEl = document.createElement()) {
   const addToCartForm = detailsEl.querySelector("form");
