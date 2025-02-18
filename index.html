@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Outer Dimensional Drip</title>
+    <title>Respect</title>
     <script type="module" defer src="/src/index.mjs"></script>
     <script type="module" defer src="/src/cart.mjs"></script>
     <script type="module" defer src="/src/nav/nav.mjs"></script>
@@ -14,10 +14,12 @@
     <header class="l-header">
       <section id="js-nav-container"></section>
       <section class="row c-title-section" id="js-title-section">
-        <a href="/"><h1>Outer Dimensional Drip</h1></a>
+        <a href="/"><h1>Respect</h1></a>
 
         <button id="js-cart-toggle" class="c-cart-btn">
-          Cart<span class="c-cart-btn-counter" id="js-cart-count">0</span>
+          vibe<span class="c-cart-btn-counter" id="js-cart-count"
+            >0 | Mystery</span
+          >
         </button>
       </section>
 
@@ -30,17 +32,15 @@
     </header>
 
     <main>
-      <section>
-        <section class="c-filters">
-          <form>
-            <select name="sort-by" id="js-sort-by">
-              <option value="asc">Price low-high</option>
-              <option value="dec">Price high-low</option>
-            </select>
-          </form>
-        </section>
-        <div id="js-products" class="products-list"></div>
+      <section class="c-filters">
+        <form>
+          <select name="sort-by" id="js-sort-by">
+            <option value="asc">Oldest</option>
+            <option value="dec">Newest</option>
+          </select>
+        </form>
       </section>
+      <section id="js-posts" class="products-list"></section>
     </main>
 
     <footer>Made with ❤️ by Monde Sineke</footer>

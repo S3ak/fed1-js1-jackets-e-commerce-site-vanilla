@@ -1,5 +1,5 @@
 /**
- * This is to create DOM elementss safely:
+ * This is to create DOM elements safely:
  * @link https://mollify.noroff.dev/content/feu1/javascript-1/module-4/create-html?nav=
  *
  */
