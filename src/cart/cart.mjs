@@ -1,7 +1,21 @@
-import { createHTML, clearNode } from "../utils.mjs";
-import cartItemTemplate from "./cart.template.mjs";
-import { calcTotal, decreaseQuantity } from "./utils.mjs";
-import { ERROR_MESSAGE_DOM_EL } from "../constants.mjs";
+/**
+ * This module handles the functionality of the shopping cart for an e-commerce site.
+ * It includes functions to add, remove, and update products in the cart, as well as
+ * rendering the cart items and calculating the total price.
+ *
+ * @module cart
+ */
+
+/**
+ * @typedef {Object} CartProduct
+ * @property {string} product.id - The unique identifier of the product.
+ * @property {string} product.imgUrl - The URL of the product image.
+ * @property {number} product.price - The price of the product.
+ * @property {string} product.title - The title of the product.
+ * @property {number} [product.quantity=1] - The quantity of the product to add to the cart.
+ */
+
+import { createHTML, clearNode } from "./utils.mjs";
 
 const cartToggleBtnEl = document.querySelector("#js-cart-toggle");
 const cartEl = document.querySelector("#js-cart");
@@ -9,6 +23,7 @@ const cartCloseBtnEl = document.querySelector("#js-close-cart");
 const cartItemsEl = document.querySelector("#js-cart-items");
 const clearCartBtnEl = document.querySelector("#js-clear-cart");
 const totalEl = document.querySelector("#js-cart-total");
+const cartCounterEl = document.querySelector("#js-cart-count");
 
 setup();
 
@@ -19,10 +34,11 @@ function setup() {
     !cartEl ||
     !cartCloseBtnEl ||
     !cartItemsEl ||
-    !clearCartBtnEl
+    !clearCartBtnEl ||
+    !cartCounterEl
   ) {
     // Log an error message if either element is missing
-    console.error(ERROR_MESSAGE_DOM_EL);
+    console.error("Elements are not avalible");
   } else {
     // If both elements exist, call the setup function to initialize the application
 
@@ -36,7 +52,52 @@ function setup() {
   }
 }
 
-export function addToCart({ id, imgUrl, price, title }) {
+function cartItemTemplate({
+  id,
+  imgUrl = "",
+  title = "Unknown",
+  price = 0,
+  alt = "No Alt provided",
+  quantity = 1,
+  subTotal = price,
+}) {
+  return `
+   <div class="c-cart-item">
+    <section class="c-cart-item_row-first">
+    
+    <a href="/product-details.html?id=${id}">
+      <img src="${imgUrl}" alt="${alt}" />
+    </a>
+    
+    <h4>${title}</h4>
+    
+    <strong class="c-cart-item_price">${price}</strong>
+    
+    <p class="c-cart-item_quantity-total">(${subTotal})</p>
+    
+    </section>
+
+    <section class="c-cart-item_controls">
+      <button class="c-cart-item_remove" data-btn="remove" id="${id}">Remove</button>
+
+      <div class="c-cart-item_quantity-container">
+        <button class="c-cart-item_remove" data-btn="decreaseQuantity" data-id="${id}">-</button>
+        
+        <p class="c-cart-item_quantity">${quantity}</p>
+        
+        <button class="c-cart-item_remove" data-btn="increaseQuantity" data-id="${id}">+</button>
+      </div>
+    </section>
+   </div>
+  `;
+}
+
+/**
+ * Adds a product to the cart. If the product already exists in the cart, it updates the quantity.
+ *
+ * @param {CartProduct} CartProduct - The product to add to the cart.
+ */
+export function addToCart({ id, imgUrl, price, title, quantity = 1 }) {
   const products = getItemsFromStorage();
 
   // Remeber findIndex qill give us -1 if nothing is found.
@@ -52,17 +113,19 @@ export function addToCart({ id, imgUrl, price, title }) {
       title,
       imgUrl,
       price,
-      quantity: 1,
+      quantity: quantity,
     });
+    // NOTE: IF there is a product already in the cart we need to update the existing quantity
   } else {
-    products[foundProductIndex].quantity++;
+    products[foundProductIndex].quantity += quantity;
   }
 
   updateComponentState(products, cartItemsEl, totalEl);
 }
 
-function clearCart() {
-  updateComponentState([], cartItemsEl);
+export function clearCart() {
+  setItemsToStorage([]);
+  renderItems([]);
 }
 
 function removeProductItem(items = [], selectedItemId) {
@@ -72,10 +135,17 @@ function removeProductItem(items = [], selectedItemId) {
   updateComponentState(filteredItems, cartItemsEl, totalEl);
 }
 
-function renderTotal(val = "", el) {
-  if (!el) {
-    console.error(new Error(ERROR_MESSAGE_DOM_EL));
-    return;
+export function calcTotal(items = []) {
+  let newTotal = 0;
+
+  if (items.length > 0) {
+    newTotal = items.reduce(
+      // We need to calc the total number of products including their qauntities. NB; BODMAS
+      (total, item) => item.quantity * item.price + total,
+      0,
+    );
+  } else {
+    return 0;
   }
 
   el.textContent = val;
@@ -121,14 +191,15 @@ export function renderItems(items = [], el, totalEl) {
   });
 
   const total = calcTotal(items);
+  renderCount(items, cartCounterEl);
   renderTotal(total, totalEl);
 }
 
-function getItemsFromStorage() {
+export function getItemsFromStorage() {
   return JSON.parse(window.localStorage.getItem("cart")) ?? [];
 }
 
-function setItemsToStorage(items = []) {
+export function setItemsToStorage(items = []) {
   window.localStorage.setItem("cart", JSON.stringify(items));
 }
 
@@ -151,4 +222,18 @@ export function updateComponentState(state, el, totalEl) {
   setItemsToStorage(state);
 
   renderItems(state, cartItemsEl, totalEl);
+}
+
+/**
+ * Updates the text content of a given HTML element with the total quantity of items.
+ *
+ * @param {Array<CartProduct>} [items=[]] - An array of item objects, each containing a `quantity` property.
+ * @param {HTMLElement} [el=document.createElement()] - The HTML element whose text content will be updated.
+ */
+function renderCount(items = [], el = document.createElement()) {
+  const newCount = items.reduce((total, item) => {
+    return total + item.quantity;
+  }, 0);
+
+  el.textContent = newCount;
 }

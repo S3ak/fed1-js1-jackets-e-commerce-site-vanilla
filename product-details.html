@@ -5,13 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Outer Dimensional Drip - Product Detail</title>
     <link rel="stylesheet" href="/src/style.css" />
-    <script defer type="module" src="/src/product-details.mjs"></script>
+    <script
+      defer
+      type="module"
+      src="/src/products/product-details.mjs"
+    ></script>
     <script type="module" defer src="/src/cart.mjs"></script>
   </head>
   <body>
     <header>
       <a href="/"><h1>Outer Dimensional Drip</h1></a>
-      <button id="js-cart-toggle">Cart</button>
+      <button id="js-cart-toggle">
+        Cart <span id="js-cart-count">0</span>
+      </button>
     </header>
 
     <main>
@@ -33,7 +39,7 @@
           <p class="skeleton-price"></p>
           <p class="skeleton-description"></p>
 
-          <form class="skeleton-purchase-options">
+          <form class="skeleton-purchase-options" name="add-to-cart">
             <label for="size">Size:</label>
             <select id="size" name="size">
               <option value="s">Small</option>
@@ -70,7 +76,7 @@
       <div class="c-cart-footer">
         <p>Total: <span id="js-cart-total">0</span></p>
 
-        <button class="c-add-to-cart">Checkout</button>
+        <a href="/checkout.html" class="c-add-to-cart c-btn">Checkout</a>
         <button class="btn" id="js-clear-cart">Clear Cart</button>
       </div>
     </aside>
