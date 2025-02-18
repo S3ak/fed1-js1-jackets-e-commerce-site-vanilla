@@ -1,4 +1,8 @@
-import { CURRENCY, ERROR_MESSAGE_DEFAULT, API_URL } from "../constants.mjs";
+import {
+  DEFAULT_CURRENCY,
+  ERROR_MESSAGE_DEFAULT,
+  API_URL,
+} from "../constants.mjs";
 import { addToCart } from "../cart.mjs";
 import {
   areDOMElementPresent,
@@ -130,7 +134,7 @@ function detailsTemplate({
 
       <div class="product-info">
         <h2>${title}</h2>
-        <p class="price">${price} ${CURRENCY}</p>
+        <p class="price">${price} ${DEFAULT_CURRENCY}</p>
         <p class="description">${description}</p>
 
         <form class="purchase-options" name="addToCartForm">
