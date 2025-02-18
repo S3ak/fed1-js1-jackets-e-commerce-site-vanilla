@@ -48,7 +48,7 @@ function setup() {
 
     const products = getItemsFromStorage();
 
-    renderItems(products);
+    renderItems(products, cartItemsEl, totalEl);
   }
 }
 
@@ -120,9 +120,7 @@ export function addToCart({ id, imgUrl, price, title, quantity = 1 }) {
     products[foundProductIndex].quantity += quantity;
   }
 
-  setItemsToStorage(products);
-
-  renderItems(products);
+  updateComponentState(products, cartItemsEl, totalEl);
 }
 
 export function clearCart() {
@@ -133,12 +131,11 @@ export function clearCart() {
 function removeProductItem(items = [], selectedItemId) {
   const filteredItems = items.filter((i) => i.id !== selectedItemId);
   // TODO: We need to remove the event listeners;
-  setItemsToStorage(filteredItems);
 
-  renderItems(filteredItems);
+  updateComponentState(filteredItems, cartItemsEl, totalEl);
 }
 
-export function calcTotal(items = []) {
+export function calcTotal(items = [], el = document.createElement()) {
   let newTotal = 0;
 
   if (items.length > 0) {
@@ -151,15 +148,11 @@ export function calcTotal(items = []) {
     return 0;
   }
 
-  return newTotal.toFixed(2);
+  el.textContent = newTotal;
 }
 
-function renderTotal(val, el) {
-  el.textContent = val;
-}
-
-function renderItems(items = []) {
-  clearNode(cartItemsEl);
+export function renderItems(items = [], el, totalEl) {
+  clearNode(el);
 
   items.forEach(({ id, imgUrl, title, price, quantity }) => {
     const subTotal = (price * quantity).toFixed(2);
@@ -191,10 +184,10 @@ function renderItems(items = []) {
     });
 
     decreaseBtnEl.addEventListener("click", (event) => {
-      decreaseQuantity(items, event.target.dataset.id);
+      decreaseQuantity(items, event.target.dataset.id, items);
     });
 
-    cartItemsEl.append(productItemEl);
+    el.append(productItemEl);
   });
 
   const total = calcTotal(items);
@@ -221,30 +214,14 @@ function increaseQuantity(items = [], id) {
   }
 
   items[foundIndex].quantity++;
-  setItemsToStorage(items);
 
-  renderItems(items);
+  updateComponentState(items, cartItemsEl, totalEl);
 }
 
-function decreaseQuantity(items = [], id) {
-  const foundIndex = items.findIndex((item) => item.id === id);
-  let newItems = [];
+export function updateComponentState(state, el, totalEl) {
+  setItemsToStorage(state);
 
-  if (foundIndex === -1) {
-    return;
-  }
-
-  items[foundIndex].quantity--;
-
-  if (items[foundIndex].quantity <= 0) {
-    newItems = items.filter((i) => i.id !== items[foundIndex].id);
-  } else {
-    newItems = items;
-  }
-
-  setItemsToStorage(newItems);
-
-  renderItems(newItems);
+  renderItems(state, cartItemsEl, totalEl);
 }
 
 /**
