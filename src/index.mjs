@@ -4,7 +4,7 @@ import {
   ERROR_MESSAGE_DEFAULT,
   ERROR_MESSAGE_DOM_EL,
 } from "./constants.mjs";
-import { addToCart } from "./cart.mjs";
+import { addToCart } from "./cart/cart.mjs";
 import { createLoadingSkeleton } from "./home/product-skeleton-template.mjs";
 import productTemplate from "./products/product-template.mjs";
 
@@ -41,7 +41,7 @@ async function setup() {
     const { products } = await fetchProductsFromAPI();
     const sortedProducts = sortByPrice(products);
 
-    renderProductsListEl(sortedProducts);
+    renderProductsListEl(sortedProducts, containerEl);
 
     containerEl.addEventListener("click", onProductClick);
 
@@ -65,7 +65,7 @@ async function setup() {
       const sortedProducts = sortByPrice(products, direction);
 
       // NOTE: we need to rerender our sorted list now;
-      renderProductsListEl(sortedProducts);
+      renderProductsListEl(sortedProducts, containerEl);
     });
 
     searchInputNode.addEventListener("input", (event) => {
@@ -82,9 +82,9 @@ async function setup() {
  *
  * @param {Array<ProductDetails>} [list=[]] - The list of products to display. Each product should be an object with the following properties:
  */
-function renderProductsListEl(list = []) {
+function renderProductsListEl(list = [], el = document.createElement()) {
   // TODO: Make this a pure function
-  clearNode(containerEl);
+  clearNode(el);
 
   list.forEach(({ id, title, image, price, description }) => {
     const template = productTemplate({
@@ -114,7 +114,7 @@ function handleSearch(searchTerm = "", list = []) {
     product.title.toLowerCase().includes(searchTerm.trim().toLowerCase()),
   );
 
-  renderProductsListEl(filteredProducts);
+  renderProductsListEl(filteredProducts, containerEl);
 }
 
 async function fetchProductsFromAPI(url = API_URL) {

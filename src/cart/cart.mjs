@@ -135,7 +135,7 @@ function removeProductItem(items = [], selectedItemId) {
   updateComponentState(filteredItems, cartItemsEl, totalEl);
 }
 
-export function calcTotal(items = []) {
+export function calcTotal(items = [], el = document.createElement()) {
   let newTotal = 0;
 
   if (items.length > 0) {
@@ -148,7 +148,7 @@ export function calcTotal(items = []) {
     return 0;
   }
 
-  el.textContent = val;
+  el.textContent = newTotal;
 }
 
 export function renderItems(items = [], el, totalEl) {
