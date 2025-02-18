@@ -40,11 +40,14 @@ function setup() {
     // Log an error message if either element is missing
     console.error("Elements are not avalible");
   } else {
+    onResizeScreen();
     // If both elements exist, call the setup function to initialize the application
 
     cartToggleBtnEl.addEventListener("click", toggleCartVisibility);
     cartCloseBtnEl.addEventListener("click", toggleCartVisibility);
     clearCartBtnEl.addEventListener("click", clearCart);
+
+    window.addEventListener("resize", onResizeScreen);
 
     const products = getItemsFromStorage();
 
@@ -259,4 +262,19 @@ function renderCount(items = [], el = document.createElement()) {
   }, 0);
 
   el.textContent = newCount;
+}
+
+/**
+ * Handles the screen resize event and toggles the cart element's visibility
+ * based on the window's width.
+ *
+ * If the window's width is 800 pixels or more, the cart element will be
+ * given the "is-open" class.
+ */
+function onResizeScreen() {
+  const isBelowMobileBreakpoint = window.innerWidth < 800;
+
+  if (!isBelowMobileBreakpoint) {
+    cartEl.classList.add("is-open");
+  }
 }

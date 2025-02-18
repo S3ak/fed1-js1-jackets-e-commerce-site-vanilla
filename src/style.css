@@ -58,14 +58,14 @@ a {
 .app {
   display: grid;
   min-width: 320px;
+  width: 100%;
   max-width: 1800px;
-  min-height: 100vh;
   height: 100dvh;
   grid-template-areas:
-    "header"
-    "main"
-    "footer";
-  grid-template-columns: 1fr;
+    "header aside"
+    "main aside"
+    "footer aside";
+  grid-template-columns: 1fr 0;
   grid-template-rows: min-content 1fr auto;
   margin: 0 auto;
   padding: 0.2rem;
@@ -76,7 +76,6 @@ a {
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 1200px;
     padding: 0.7rem 0.3rem;
     flex: 0;
     position: relative;
@@ -247,7 +246,6 @@ button:focus-visible {
   right: 0;
   width: 80vw;
   min-width: 280px;
-  height: 100dvh;
   background-color: #242424;
 }
 
@@ -256,6 +254,10 @@ button:focus-visible {
   transition: transform 100ms;
   display: flex;
   flex-direction: column;
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 100dvh;
 
   &.is-open {
     transform: translateX(0);
@@ -264,6 +266,10 @@ button:focus-visible {
   nav {
     display: flex;
     flex-direction: column;
+
+    .c-nav-link {
+      min-height: 45px;
+    }
   }
 }
 
