@@ -63,6 +63,12 @@
   padding: 0.6rem;
 }
 
+@media only screen and (min-width: 1200px) {
+  .c-close-cart {
+    display: none;
+  }
+}
+
 .c-cart-item_quantity-total {
   color: var(--stone-7);
 }
