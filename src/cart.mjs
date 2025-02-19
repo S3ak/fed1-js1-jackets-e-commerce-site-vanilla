@@ -268,11 +268,10 @@ function renderCount(items = [], el = document.createElement()) {
  * Handles the screen resize event and toggles the cart element's visibility
  * based on the window's width.
  *
- * If the window's width is 800 pixels or more, the cart element will be
- * given the "is-open" class.
+ * If the window's width is desktop size or more, the cart element will be open
  */
 function onResizeScreen() {
-  const isBelowMobileBreakpoint = window.innerWidth < 800;
+  const isBelowMobileBreakpoint = window.innerWidth < 1200;
 
   if (!isBelowMobileBreakpoint) {
     cartEl.classList.add("is-open");

@@ -3,7 +3,7 @@ describe("Checkout", () => {
     cy.visit("");
     cy.get("#js-add-to-cart-b4eaa52e-2efe-4075-9772-e0c6d7ba04bb").click();
     cy.get("#js-add-to-cart-97e77845-a485-4301-827f-51b673d4230f").click();
-    cy.get("#js-cart-count").click();
+    cy.openCart();
     cy.get(
       `${getItemControllerSelector(1)} > [data-btn="increaseQuantity"]`,
     ).click();
