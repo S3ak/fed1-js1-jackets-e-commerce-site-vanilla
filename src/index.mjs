@@ -1,5 +1,5 @@
 import { createHTML, clearNode, getLocalItem, setLocalItem } from "./utils.mjs";
-import { API_URL, ERROR_MESSAGE_DEFAULT } from "./constants.mjs";
+import { API_URL, ERROR_MESSAGE_DEFAULT, MEDIA_QUERIES } from "./constants.mjs";
 import { addToCart } from "./cart.mjs";
 import { createLoadingSkeleton } from "./home/product-skeleton-template.mjs";
 import productTemplate from "./products/product-template.mjs";
@@ -192,7 +192,7 @@ function onProductClick(event) {
 
 function setTitle() {
   const h1El = titleEl.querySelector("h1");
-  const isBelowMobileBreakpoint = window.innerWidth < 600;
+  const isBelowMobileBreakpoint = window.innerWidth < MEDIA_QUERIES.s;
 
   h1El.textContent = "ODD";
 
