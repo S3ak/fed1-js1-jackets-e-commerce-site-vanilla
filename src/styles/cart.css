@@ -57,6 +57,9 @@
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
+  width: 60px;
+  height: 45px;
+  padding: 0.6rem;
 }
 
 .c-cart-item_quantity-total {

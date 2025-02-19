@@ -44,7 +44,6 @@ describe("Home >>>", () => {
   it("feat: As a user, I want to remove a product from my basket.", () => {
     cy.contains("Add to Cart").first().click();
     cy.get("#js-cart-count").contains("1");
-    cy.get("#js-cart-toggle").click({ force: true });
     cy.contains("Remove").click();
     cy.get("#js-cart-count").contains("0");
   });
