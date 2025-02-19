@@ -38,13 +38,16 @@ function setup() {
     !cartCounterEl
   ) {
     // Log an error message if either element is missing
-    console.error("JS cannot run!!!");
+    console.error("Elements are not avalible");
   } else {
+    onResizeScreen();
     // If both elements exist, call the setup function to initialize the application
 
     cartToggleBtnEl.addEventListener("click", toggleCartVisibility);
     cartCloseBtnEl.addEventListener("click", toggleCartVisibility);
     clearCartBtnEl.addEventListener("click", clearCart);
+
+    window.addEventListener("resize", onResizeScreen);
 
     const products = getItemsFromStorage();
 
@@ -125,7 +128,7 @@ export function addToCart({ id, imgUrl, price, title, quantity = 1 }) {
   renderItems(products);
 }
 
-function clearCart() {
+export function clearCart() {
   setItemsToStorage([]);
   renderItems([]);
 }
@@ -138,7 +141,7 @@ function removeProductItem(items = [], selectedItemId) {
   renderItems(filteredItems);
 }
 
-function calcTotal(items = []) {
+export function calcTotal(items = []) {
   let newTotal = 0;
 
   if (items.length > 0) {
@@ -202,11 +205,11 @@ function renderItems(items = []) {
   renderTotal(total, totalEl);
 }
 
-function getItemsFromStorage() {
+export function getItemsFromStorage() {
   return JSON.parse(window.localStorage.getItem("cart")) ?? [];
 }
 
-function setItemsToStorage(items = []) {
+export function setItemsToStorage(items = []) {
   window.localStorage.setItem("cart", JSON.stringify(items));
 }
 
@@ -259,4 +262,18 @@ function renderCount(items = [], el = document.createElement()) {
   }, 0);
 
   el.textContent = newCount;
+}
+
+/**
+ * Handles the screen resize event and toggles the cart element's visibility
+ * based on the window's width.
+ *
+ * If the window's width is desktop size or more, the cart element will be open
+ */
+function onResizeScreen() {
+  const isBelowMobileBreakpoint = window.innerWidth < 1200;
+
+  if (!isBelowMobileBreakpoint) {
+    cartEl.classList.add("is-open");
+  }
 }

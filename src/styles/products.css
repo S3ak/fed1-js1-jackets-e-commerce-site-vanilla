@@ -1,7 +1,9 @@
-.products-list {
+.c-products-list {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
+  margin: auto;
+  justify-content: center;
 }
 
 .c-product-preview-details {
