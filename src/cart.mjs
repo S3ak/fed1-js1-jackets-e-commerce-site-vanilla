@@ -15,6 +15,7 @@
  * @property {number} [product.quantity=1] - The quantity of the product to add to the cart.
  */
 
+import { MEDIA_QUERIES } from "./constants.mjs";
 import { createHTML, clearNode } from "./utils.mjs";
 
 const cartToggleBtnEl = document.querySelector("#js-cart-toggle");
@@ -271,7 +272,7 @@ function renderCount(items = [], el = document.createElement()) {
  * If the window's width is desktop size or more, the cart element will be open
  */
 function onResizeScreen() {
-  const isBelowMobileBreakpoint = window.innerWidth < 1200;
+  const isBelowMobileBreakpoint = window.innerWidth < MEDIA_QUERIES.l;
 
   if (!isBelowMobileBreakpoint) {
     cartEl.classList.add("is-open");
