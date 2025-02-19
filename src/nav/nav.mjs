@@ -2,6 +2,7 @@ import { clearNode, createHTML } from "../utils.mjs";
 
 const containerEl = document.querySelector("#js-nav-container");
 const titleSectionEl = document.querySelector("#js-title-section");
+const navContainerEl = document.querySelector("#js-nav-toggle-container");
 
 const url = window.location.pathname;
 
@@ -36,16 +37,25 @@ const menuToggleTemplate = `<button>X</button>`;
 
 const desktopNavEl = createHTML(desktopTemplate);
 const mobileNavEl = createHTML(mobileTemplate);
-const menuToggleEl = createHTML(menuToggleTemplate);
 
-renderNav();
+setup();
 
-mobileNavEl.querySelector("button").addEventListener("click", onMenuToggle);
-
-window.addEventListener("resize", renderNav);
+function setup() {
+  // Check if the containerEl and sortByEl elements exist in the DOM
+  if (!containerEl || !titleSectionEl || !navContainerEl) {
+    // Log an error message if either element is missing
+    console.error("Elements are not avalible");
+  } else {
+    renderNav();
+    mobileNavEl.querySelector("button").addEventListener("click", onMenuToggle);
+    window.addEventListener("resize", renderNav);
+  }
+}
 
 function renderNav() {
+  const menuToggleEl = createHTML(menuToggleTemplate);
   let navEl = document.createElement("span");
+
   const isBelowMobileBreakpoint = window.innerWidth < 800;
 
   clearNode(containerEl);
@@ -53,7 +63,7 @@ function renderNav() {
   if (isBelowMobileBreakpoint) {
     menuToggleEl.addEventListener("click", onMenuToggle);
 
-    titleSectionEl.insertBefore(menuToggleEl, null);
+    navContainerEl.append(menuToggleEl);
     navEl = mobileNavEl;
   } else {
     // Remove the menu button;
@@ -65,7 +75,7 @@ function renderNav() {
 }
 
 function getActive(currentUrl, page) {
-  if (currentUrl === page) {
+  if (currentUrl.includes(page)) {
     return "is-active";
   }
 

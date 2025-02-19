@@ -5,6 +5,7 @@ import { createLoadingSkeleton } from "./home/product-skeleton-template.mjs";
 import productTemplate from "./products/product-template.mjs";
 
 const containerEl = document.querySelector("#js-products");
+const titleEl = document.querySelector("#js-title-section");
 const sortByEl = document.querySelector("#js-sort-by");
 const searchInputNode = document.querySelector("#search");
 
@@ -27,9 +28,9 @@ setup();
 async function setup() {
   // Check if the containerEl and sortByEl elements exist in the DOM
   // FIXME: This should be a function that accepts all DOM element that contain an ID with the predix JS
-  if (!containerEl || !sortByEl || !searchInputNode) {
+  if (!containerEl || !sortByEl || !searchInputNode || !titleEl) {
     // Log an error message if either element is missing
-    console.error("JS cannot run!!!");
+    console.error("Missing dom elements");
   } else {
     // If both elements exist, call the setup function to initialize the application
     createLoadingSkeleton(containerEl);
@@ -70,6 +71,8 @@ async function setup() {
 
       handleSearch(event.target.value, products);
     });
+
+    window.addEventListener("resize", setTitle);
   }
 }
 
@@ -184,5 +187,16 @@ function onProductClick(event) {
   } else if (target.tagName === "IMG" && container) {
     // The anchor tag will navigate the user. AS long as we dont use e.preventDefault();
     console.log(`Navigate to product details for product ID: ${productId}`);
+  }
+}
+
+function setTitle() {
+  const h1El = titleEl.querySelector("h1");
+  const isBelowMobileBreakpoint = window.innerWidth < 600;
+
+  h1El.textContent = "ODD";
+
+  if (!isBelowMobileBreakpoint) {
+    h1El.textContent = "Outer Dimensional Drip";
   }
 }

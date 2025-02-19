@@ -144,16 +144,6 @@
   border-radius: 3px;
 }
 
-@media (max-width: 768px) {
-  .product-details {
-    flex-direction: column;
-  }
-  .product-image {
-    margin-right: 0;
-    margin-bottom: 20px;
-  }
-}
-
 .c-filters {
   padding: 1rem 1.2rem;
 }
