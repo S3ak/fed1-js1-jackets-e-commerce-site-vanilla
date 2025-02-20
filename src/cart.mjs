@@ -134,7 +134,7 @@ export function clearCart() {
 }
 
 function removeProductItem(items = [], selectedItemId) {
-  const filteredItems = items.filter((i) => i.id !== selectedItemId);
+  const filteredItems = items.filter((i) => i.id !== Number(selectedItemId));
   // TODO: We need to remove the event listeners;
   setItemsToStorage(filteredItems);
 
@@ -186,7 +186,7 @@ function renderItems(items = []) {
     );
 
     removeBtnEl.addEventListener("click", (event) => {
-      removeProductItem(items, event.target.id);
+      removeProductItem(items, event.target.dataset.id);
     });
 
     increaseBtnEl.addEventListener("click", (event) => {
