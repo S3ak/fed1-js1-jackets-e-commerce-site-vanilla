@@ -85,7 +85,7 @@ function renderProductsListEl(list = []) {
   // TODO: Make this a pure function
   clearNode(containerEl);
 
-  list.forEach(({ id, title, image, price, description }) => {
+  list.forEach(({ id, title, image, price, description }, index) => {
     const template = productTemplate({
       id,
       title,
@@ -93,6 +93,7 @@ function renderProductsListEl(list = []) {
       imgAl: image.alt,
       price,
       description,
+      index,
     });
 
     const newEl = createHTML(template);

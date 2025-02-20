@@ -16,7 +16,7 @@
  */
 
 import { MEDIA_QUERIES } from "./constants.mjs";
-import { createHTML, clearNode } from "./utils.mjs";
+import { createHTML, clearNode, isBrowser } from "./utils.mjs";
 
 const cartToggleBtnEl = document.querySelector("#js-cart-toggle");
 const cartEl = document.querySelector("#js-cart");
@@ -36,7 +36,8 @@ function setup() {
     !cartCloseBtnEl ||
     !cartItemsEl ||
     !clearCartBtnEl ||
-    !cartCounterEl
+    !cartCounterEl ||
+    !isBrowser()
   ) {
     // Log an error message if either element is missing
     console.error("Elements are not avalible");
