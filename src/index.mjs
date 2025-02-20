@@ -30,7 +30,7 @@ async function setup() {
   // FIXME: This should be a function that accepts all DOM element that contain an ID with the predix JS
   if (!containerEl || !sortByEl || !searchInputNode || !titleEl) {
     // Log an error message if either element is missing
-    console.error("Missing dom elements");
+    console.error("Missing HTML elements");
   } else {
     // If both elements exist, call the setup function to initialize the application
     createLoadingSkeleton(containerEl);
@@ -85,12 +85,12 @@ function renderProductsListEl(list = []) {
   // TODO: Make this a pure function
   clearNode(containerEl);
 
-  list.forEach(({ id, title, image, price, description }, index) => {
+  list.forEach(({ id, title, price, description, thumbnail }, index) => {
     const template = productTemplate({
       id,
       title,
-      imgUrl: image.url,
-      imgAl: image.alt,
+      imgUrl: thumbnail,
+      imgAl: title,
       price,
       description,
       index,
@@ -124,7 +124,7 @@ async function fetchProductsFromAPI(url = API_URL) {
 
   try {
     const response = await fetch(url);
-    const { data } = await response.json();
+    const { products: data } = await response.json();
     products = data;
     setLocalItem(PRODUCTS_KEY, products);
   } catch (err) {
@@ -175,13 +175,13 @@ function onProductClick(event) {
   if (target.tagName === "BUTTON" && container) {
     /** @type {Array<ProductDetails>} */
     const products = getLocalItem(PRODUCTS_KEY);
-    const foundProduct = products.find((p) => p.id === productId);
+    const foundProduct = products.find((p) => p.id === Number(productId));
 
     if (foundProduct) {
       addToCart({
         id: foundProduct.id,
         title: foundProduct.title,
-        imgUrl: foundProduct.image.url,
+        imgUrl: foundProduct.thumbnail,
         price: foundProduct.price,
       });
     }

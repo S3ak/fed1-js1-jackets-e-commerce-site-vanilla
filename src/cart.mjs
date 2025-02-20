@@ -83,7 +83,7 @@ function cartItemTemplate({
     </section>
 
     <section class="c-cart-item_controls">
-      <button class="c-cart-item_remove" data-btn="remove" id="${id}">Remove</button>
+      <button class="c-cart-item_remove" data-btn="remove" data-id="${id}">Remove</button>
 
       <div class="c-cart-item_quantity-container">
         <button class="c-cart-item_remove" data-btn="decreaseQuantity" data-id="${id}">-</button>
@@ -106,9 +106,7 @@ export function addToCart({ id, imgUrl, price, title, quantity = 1 }) {
   const products = getItemsFromStorage();
 
   // Remeber findIndex qill give us -1 if nothing is found.
-  const foundProductIndex = products.findIndex((item) => {
-    return item.id === id;
-  });
+  const foundProductIndex = products.findIndex((item) => item.id === id);
 
   // if the product doesn't already exist in our cart then add it to the cart else change the quantity;
   // NB: -1 is a truthy value
@@ -118,7 +116,7 @@ export function addToCart({ id, imgUrl, price, title, quantity = 1 }) {
       title,
       imgUrl,
       price,
-      quantity: quantity,
+      quantity,
     });
     // NOTE: IF there is a product already in the cart we need to update the existing quantity
   } else {
@@ -220,7 +218,7 @@ function toggleCartVisibility() {
 }
 
 function increaseQuantity(items = [], id) {
-  const foundIndex = items.findIndex((item) => item.id === id);
+  const foundIndex = items.findIndex((item) => item.id === Number(id));
   if (foundIndex === -1) {
     return;
   }
@@ -232,7 +230,7 @@ function increaseQuantity(items = [], id) {
 }
 
 function decreaseQuantity(items = [], id) {
-  const foundIndex = items.findIndex((item) => item.id === id);
+  const foundIndex = items.findIndex((item) => item.id === Number(id));
   let newItems = [];
 
   if (foundIndex === -1) {
