@@ -90,3 +90,7 @@ export function setLocalItem(key = "", value) {
 export function getLocalItem(key = "") {
   return JSON.parse(window.localStorage.getItem(key));
 }
+
+export function isBrowser() {
+  return Boolean(window || window.document);
+}

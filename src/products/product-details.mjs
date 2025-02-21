@@ -66,9 +66,9 @@ async function fetchProductDetails(productId = "") {
     }
 
     const response = await fetch(`${API_URL}/${productId}`);
-    const { data } = await response.json();
+    const product = await response.json();
 
-    return data;
+    return product;
   } catch (error) {
     console.error(ERROR_MESSAGE_DEFAULT, error?.message);
   }
@@ -82,12 +82,12 @@ async function fetchProductDetails(productId = "") {
  * @returns {Promise<void>} A promise that resolves when the product details have been rendered.
  */
 async function renderProductDetails(productId, containerEl) {
-  const { image, title, price, description } =
+  const { images, title, price, description } =
     await fetchProductDetails(productId);
 
   const template = detailsTemplate({
-    primaryImgUrl: image.url,
-    alt: image.alt,
+    primaryImgUrl: images[0],
+    alt: title,
     title,
     price,
     description,
@@ -122,8 +122,8 @@ function detailsTemplate({
     <article>
       <div class="product-images">
         <img
-          src=${primaryImgUrl}
-          alt=${alt}
+          src="${primaryImgUrl}"
+          alt="${alt}"
           class="main-image"
         />
       </div>

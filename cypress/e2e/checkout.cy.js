@@ -1,8 +1,8 @@
 describe("Checkout", () => {
   it("full checkout experience >>>", function () {
     cy.visit("");
-    cy.get("#js-add-to-cart-b4eaa52e-2efe-4075-9772-e0c6d7ba04bb").click();
-    cy.get("#js-add-to-cart-97e77845-a485-4301-827f-51b673d4230f").click();
+    cy.get("#js-add-to-cart-26").click();
+    cy.get("#js-add-to-cart-21").click();
     cy.openCart();
     cy.get(
       `${getItemControllerSelector(1)} > [data-btn="increaseQuantity"]`,
@@ -28,8 +28,7 @@ describe("Checkout", () => {
     cy.get(
       `${getItemControllerSelector(2)} > [data-btn="increaseQuantity"]`,
     ).click();
-    cy.get("#js-add-to-cart-ff94a6eb-524b-4a56-b326-92fd13ee0918").click();
-    cy.get("#\\39 7e77845-a485-4301-827f-51b673d4230f").click();
+    cy.get("#js-add-to-cart-25").click();
     cy.contains("Checkout").click();
     cy.url().should("include", "checkout");
     cy.get("#name").type("Test user");

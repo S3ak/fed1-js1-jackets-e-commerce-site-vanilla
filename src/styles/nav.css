@@ -1,0 +1,56 @@
+.c-nav-container {
+  display: flex;
+  gap: 2rem;
+  padding: 0.3rem;
+  z-index: 900;
+  top: 0;
+  right: 0;
+  width: 80vw;
+  min-width: 280px;
+}
+
+.c-nav--mobile {
+  transform: translateX(100%);
+  transition: transform 100ms;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 100dvh;
+  padding: var(--size-fluid-3) var(--size-fluid-1);
+  background-color: #242424;
+
+  &.is-open {
+    transform: translateX(0);
+  }
+
+  nav {
+    display: flex;
+    flex-direction: column;
+
+    .c-nav-link {
+      min-height: 45px;
+    }
+  }
+}
+
+.c-nav--desktop {
+  position: relative;
+  width: 100%;
+  height: auto;
+
+  nav {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+  }
+}
+
+.c-nav-link {
+  color: white;
+
+  &.is-active {
+    color: blue;
+  }
+}

@@ -12,21 +12,25 @@
   </head>
   <body class="app">
     <header class="l-header">
-      <section id="js-nav-container"></section>
-      <section class="row c-title-section" id="js-title-section">
-        <a href="/"><h1>Outer Dimensional Drip</h1></a>
+      <section class="c-title-section" id="js-title-section">
+        <div class="row c-title-section_title-row">
+          <a href="/"><h1>ODD</h1></a>
 
-        <button id="js-cart-toggle" class="c-cart-btn">
-          Cart<span class="c-cart-btn-counter" id="js-cart-count">0</span>
-        </button>
-      </section>
+          <div class="c-title-section_controls">
+            <button id="js-cart-toggle" class="c-cart-btn">
+              Cart<span class="c-cart-btn-counter" id="js-cart-count">0</span>
+            </button>
+            <div id="js-nav-toggle-container"></div>
+          </div>
+        </div>
 
-      <section class="row">
         <form class="c-search" name="searchForm">
-          <label for="search">Search</label>
-          <input type="text" name="search" id="search" placeholder="..." />
+          <label for="search" hidden>Search</label>
+          <input type="text" name="search" id="search" placeholder="Search" />
         </form>
       </section>
+
+      <section id="js-nav-container"></section>
     </header>
 
     <main class="l-main">

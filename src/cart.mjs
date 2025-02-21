@@ -15,7 +15,8 @@
  * @property {number} [product.quantity=1] - The quantity of the product to add to the cart.
  */
 
-import { createHTML, clearNode } from "./utils.mjs";
+import { MEDIA_QUERIES } from "./constants.mjs";
+import { createHTML, clearNode, isBrowser } from "./utils.mjs";
 
 const cartToggleBtnEl = document.querySelector("#js-cart-toggle");
 const cartEl = document.querySelector("#js-cart");
@@ -35,7 +36,8 @@ function setup() {
     !cartCloseBtnEl ||
     !cartItemsEl ||
     !clearCartBtnEl ||
-    !cartCounterEl
+    !cartCounterEl ||
+    !isBrowser()
   ) {
     // Log an error message if either element is missing
     console.error("Elements are not avalible");
@@ -81,7 +83,7 @@ function cartItemTemplate({
     </section>
 
     <section class="c-cart-item_controls">
-      <button class="c-cart-item_remove" data-btn="remove" id="${id}">Remove</button>
+      <button class="c-cart-item_remove" data-btn="remove" data-id="${id}">Remove</button>
 
       <div class="c-cart-item_quantity-container">
         <button class="c-cart-item_remove" data-btn="decreaseQuantity" data-id="${id}">-</button>
@@ -104,9 +106,7 @@ export function addToCart({ id, imgUrl, price, title, quantity = 1 }) {
   const products = getItemsFromStorage();
 
   // Remeber findIndex qill give us -1 if nothing is found.
-  const foundProductIndex = products.findIndex((item) => {
-    return item.id === id;
-  });
+  const foundProductIndex = products.findIndex((item) => item.id === id);
 
   // if the product doesn't already exist in our cart then add it to the cart else change the quantity;
   // NB: -1 is a truthy value
@@ -116,7 +116,7 @@ export function addToCart({ id, imgUrl, price, title, quantity = 1 }) {
       title,
       imgUrl,
       price,
-      quantity: quantity,
+      quantity,
     });
     // NOTE: IF there is a product already in the cart we need to update the existing quantity
   } else {
@@ -134,7 +134,7 @@ export function clearCart() {
 }
 
 function removeProductItem(items = [], selectedItemId) {
-  const filteredItems = items.filter((i) => i.id !== selectedItemId);
+  const filteredItems = items.filter((i) => i.id !== Number(selectedItemId));
   // TODO: We need to remove the event listeners;
   setItemsToStorage(filteredItems);
 
@@ -186,7 +186,7 @@ function renderItems(items = []) {
     );
 
     removeBtnEl.addEventListener("click", (event) => {
-      removeProductItem(items, event.target.id);
+      removeProductItem(items, event.target.dataset.id);
     });
 
     increaseBtnEl.addEventListener("click", (event) => {
@@ -218,7 +218,7 @@ function toggleCartVisibility() {
 }
 
 function increaseQuantity(items = [], id) {
-  const foundIndex = items.findIndex((item) => item.id === id);
+  const foundIndex = items.findIndex((item) => item.id === Number(id));
   if (foundIndex === -1) {
     return;
   }
@@ -230,7 +230,7 @@ function increaseQuantity(items = [], id) {
 }
 
 function decreaseQuantity(items = [], id) {
-  const foundIndex = items.findIndex((item) => item.id === id);
+  const foundIndex = items.findIndex((item) => item.id === Number(id));
   let newItems = [];
 
   if (foundIndex === -1) {
@@ -271,7 +271,7 @@ function renderCount(items = [], el = document.createElement()) {
  * If the window's width is desktop size or more, the cart element will be open
  */
 function onResizeScreen() {
-  const isBelowMobileBreakpoint = window.innerWidth < 1200;
+  const isBelowMobileBreakpoint = window.innerWidth < MEDIA_QUERIES.l;
 
   if (!isBelowMobileBreakpoint) {
     cartEl.classList.add("is-open");
