@@ -1,10 +1,11 @@
 import { createHTML, clearNode, getLocalItem, setLocalItem } from "./utils.mjs";
-import { API_URL, ERROR_MESSAGE_DEFAULT } from "./constants.mjs";
+import { API_URL, ERROR_MESSAGE_DEFAULT, MEDIA_QUERIES } from "./constants.mjs";
 import { addToCart } from "./cart.mjs";
 import { createLoadingSkeleton } from "./home/product-skeleton-template.mjs";
 import productTemplate from "./products/product-template.mjs";
 
 const containerEl = document.querySelector("#js-products");
+const titleEl = document.querySelector("#js-title-section");
 const sortByEl = document.querySelector("#js-sort-by");
 const searchInputNode = document.querySelector("#search");
 
@@ -27,9 +28,9 @@ setup();
 async function setup() {
   // Check if the containerEl and sortByEl elements exist in the DOM
   // FIXME: This should be a function that accepts all DOM element that contain an ID with the predix JS
-  if (!containerEl || !sortByEl || !searchInputNode) {
+  if (!containerEl || !sortByEl || !searchInputNode || !titleEl) {
     // Log an error message if either element is missing
-    console.error("JS cannot run!!!");
+    console.error("Missing HTML elements");
   } else {
     // If both elements exist, call the setup function to initialize the application
     createLoadingSkeleton(containerEl);
@@ -70,6 +71,8 @@ async function setup() {
 
       handleSearch(event.target.value, products);
     });
+
+    window.addEventListener("resize", setTitle);
   }
 }
 
@@ -82,14 +85,15 @@ function renderProductsListEl(list = []) {
   // TODO: Make this a pure function
   clearNode(containerEl);
 
-  list.forEach(({ id, title, image, price, description }) => {
+  list.forEach(({ id, title, price, description, thumbnail }, index) => {
     const template = productTemplate({
       id,
       title,
-      imgUrl: image.url,
-      imgAl: image.alt,
+      imgUrl: thumbnail,
+      imgAl: title,
       price,
       description,
+      index,
     });
 
     const newEl = createHTML(template);
@@ -120,7 +124,7 @@ async function fetchProductsFromAPI(url = API_URL) {
 
   try {
     const response = await fetch(url);
-    const { data } = await response.json();
+    const { products: data } = await response.json();
     products = data;
     setLocalItem(PRODUCTS_KEY, products);
   } catch (err) {
@@ -171,18 +175,29 @@ function onProductClick(event) {
   if (target.tagName === "BUTTON" && container) {
     /** @type {Array<ProductDetails>} */
     const products = getLocalItem(PRODUCTS_KEY);
-    const foundProduct = products.find((p) => p.id === productId);
+    const foundProduct = products.find((p) => p.id === Number(productId));
 
     if (foundProduct) {
       addToCart({
         id: foundProduct.id,
         title: foundProduct.title,
-        imgUrl: foundProduct.image.url,
+        imgUrl: foundProduct.thumbnail,
         price: foundProduct.price,
       });
     }
   } else if (target.tagName === "IMG" && container) {
     // The anchor tag will navigate the user. AS long as we dont use e.preventDefault();
     console.log(`Navigate to product details for product ID: ${productId}`);
+  }
+}
+
+function setTitle() {
+  const h1El = titleEl.querySelector("h1");
+  const isBelowMobileBreakpoint = window.innerWidth < MEDIA_QUERIES.s;
+
+  h1El.textContent = "ODD";
+
+  if (!isBelowMobileBreakpoint) {
+    h1El.textContent = "Outer Dimensional Drip";
   }
 }

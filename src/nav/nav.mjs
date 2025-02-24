@@ -1,7 +1,9 @@
 import { clearNode, createHTML } from "../utils.mjs";
+import { MEDIA_QUERIES } from "../constants.mjs";
 
 const containerEl = document.querySelector("#js-nav-container");
 const titleSectionEl = document.querySelector("#js-title-section");
+const navContainerEl = document.querySelector("#js-nav-toggle-container");
 
 const url = window.location.pathname;
 
@@ -38,26 +40,36 @@ const desktopNavEl = createHTML(desktopTemplate);
 const mobileNavEl = createHTML(mobileTemplate);
 const menuToggleEl = createHTML(menuToggleTemplate);
 
-renderNav();
+setup();
 
-mobileNavEl.querySelector("button").addEventListener("click", onMenuToggle);
-
-window.addEventListener("resize", renderNav);
+function setup() {
+  // Check if the containerEl and sortByEl elements exist in the DOM
+  if (!containerEl || !titleSectionEl || !navContainerEl) {
+    // Log an error message if either element is missing
+    console.error("Elements are not avalible");
+  } else {
+    renderNav();
+    navContainerEl.append(menuToggleEl);
+    mobileNavEl.querySelector("button").addEventListener("click", onMenuToggle);
+    window.addEventListener("resize", renderNav);
+  }
+}
 
 function renderNav() {
   let navEl = document.createElement("span");
-  const isBelowMobileBreakpoint = window.innerWidth < 800;
+
+  menuToggleEl.addEventListener("click", onMenuToggle);
+
+  const isBelowMobileBreakpoint = window.innerWidth < MEDIA_QUERIES.s;
 
   clearNode(containerEl);
 
   if (isBelowMobileBreakpoint) {
-    menuToggleEl.addEventListener("click", onMenuToggle);
-
-    titleSectionEl.insertBefore(menuToggleEl, null);
+    menuToggleEl.style.display = "flex";
     navEl = mobileNavEl;
   } else {
     // Remove the menu button;
-    menuToggleEl.remove();
+    menuToggleEl.style.display = "none";
     navEl = desktopNavEl;
   }
 
@@ -65,7 +77,7 @@ function renderNav() {
 }
 
 function getActive(currentUrl, page) {
-  if (currentUrl === page) {
+  if (currentUrl.includes(page)) {
     return "is-active";
   }
 
