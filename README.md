@@ -1,5 +1,7 @@
 # fed1-js1-jackets-e-commerce-site-vanilla
 
+Ola Njitaka. This is a project models how a graduate level developer can use HTML5, CSS3, and JS(es2025) vanilla website using a build tool which requires Node to be installed on the developers workstation (Laptop, PC). The project is a social media platoform site that relies on the [dummyjson API]('https://dummyjson.com/posts') API. The project is built with vanilla JS and Vite. The project is a monorepo with the featuring packages:
+
 [Edit in StackBlitz next generation editor ⚡️](https://stackblitz.com/~/github.com/S3ak/fed1-js1-jackets-e-commerce-site-vanilla)
 
 ## Project Assets
@@ -30,20 +32,15 @@
 
 ## Resources
 
-## Project leads
-
-- Monde Sineke: <nkululeko.sineke@noroff.no> - Technical lead
-
 ## Features
 
-- SEO friendly #TODO
-- Responsive #TODO
-- Prebuilt components #TODO
-- E2E testing with every pull request #TODO
+- SEO friendly (vanilla)
+- Responsive
+- E2E testing with every pull request
 
 ## Enviroments
 
-There are two enviroments.Pr
+There are two enviroments.
 
 ### production
 
@@ -58,13 +55,12 @@ Staging is the enviroment where the team can test the latest features and bug fi
 <details>
   <summary>Quick Start</summary>
   
-- Checkout using VScode
-- press *F1* and type `git:clone`
-- Install packages
+- Checkout using VScode  and type `git:clone`
+- press *F1* (ctrl+shift+P) and type `git:clone`
+- Install packages (*F1*) and type `run task` and hit enter then type `npm` and hit enter then type `npm install` and hit enter.
 - press *F1* and type `run task` and hit enter.
-- type `npm` and hit enter.
-- type `install` and hit enter.
 - press *F5*
+- press *F1* and type `create branch` and hit enter.
 
 </details>
 
@@ -86,30 +82,26 @@ git checkout -b feature/your-name-feature
 npm run dev
 ```
 
-Forth. Open up cypress to see that you have not broken anything:
+4 Open up cypress to see that you have not broken anything:
 
 ```bash
 npm run test:e2e:open
 ```
 
-Fifth. Open up storybook to start developing your component:
+5 Open up storybook to start developing your component:
 
 ```bash
 npm run storybook
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:5175](http://localhost:5175) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+You can start editing the page by modifying `index.html`. The page auto-updates as you edit the file.
 
 ## Minimum acceptence criteria
 
 Please see issues tab.
 
-## Deploy on Vercel
+## Author and Contributors
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Monde Sineke: <nsineke@gmail.com> - Technical lead
