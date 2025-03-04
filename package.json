@@ -1,13 +1,14 @@
 {
-  "name": "vite-starter",
+  "name": "nordic-plug",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "cy:open": "cypress open"
+    "cy:open": "cypress open",
+    "semantic-release": "semantic-release"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
@@ -16,7 +17,8 @@
     "eslint-plugin-cypress": "^4.1.0",
     "globals": "^15.14.0",
     "prettier": "3.4.2",
-    "vite": "^6.0.11"
+    "vite": "^6.0.11",
+    "semantic-release": "^22.0.7"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.7.2",
